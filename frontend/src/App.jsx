@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import SensorChart from './components/SensorChart'
+import Navbar from './components/Navbar'
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
 
   return (
     <>
+      <Navbar />
       <SensorChart data={sensorData}/>
       <h1 className='p-4 text-pink-500'>Vite + React + Tailwindcss</h1>;
     </>
