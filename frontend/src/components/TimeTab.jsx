@@ -18,7 +18,7 @@ export default function TimeTab() {
 
 
     return (
-        <div className="bg-white p-3 rounded-xl border-4 border-solid border-black w-56 text-center flex justify-center flex-col">
+        <div className="bg-white p-3 rounded-xl border-4 border-solid border-black text-center flex justify-center flex-col w-[24rem]">
             <p className="text-2xl mb-1">Local Time:</p>
             <p className="text-3xl">{time}</p>
         </div>
