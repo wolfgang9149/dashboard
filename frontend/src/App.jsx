@@ -21,6 +21,11 @@ function App() {
   return (
     <>
       <Navbar />
+      <div className="grid grid-cols-3 grid-rows-3 gap-2 border-black border-dashed border-2">
+        <div className="col-start-1 col-span-2 row-span-3  h-[300px]">
+          <div className="bg-gray-300">Image placeholder</div>
+        </div>
+      </div>
       <SensorChart data={sensorData}/>
       <h1 className='p-4 text-pink-500'>Vite + React + Tailwindcss</h1>;
     </>
