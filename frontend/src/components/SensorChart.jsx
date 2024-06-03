@@ -27,7 +27,7 @@ export default function Chart({ data }) {
       <Tooltip />
       <Legend />
 
-      <Bar dataKey="value" fill="#82ca9d" />
+      <Bar dataKey="value" fill="#E5303E" />
     </BarChart>
   </ResponsiveContainer>
   )
