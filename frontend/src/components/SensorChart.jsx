@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   BarChart,
   Bar,
@@ -22,7 +21,7 @@ export default function Chart({ data }) {
           bottom: 5
         }}
       >
-        <CartesianGrid strokeDasharray='3 3' />
+        <CartesianGrid strokeDasharray='3 3' fill='white' />
         <XAxis dataKey='name' />
         <YAxis dataKey='value' />
         <Tooltip />
