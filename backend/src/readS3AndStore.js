@@ -32,9 +32,8 @@ const readCSVFromS3 = () => {
 
       s3.getObject(fileParams)
         .createReadStream()
-        .pipe(csv())
+        .pipe(csv({ headers: false })) // CSV file does not have headers
         .on('data', async (row) => {
-          // Need to destructure each column in the Excel. There are no headings so columns need to be referred to by index
           const day = row[0];
           const timestamp = row[1];
           const temperature = parseFloat(row[2]);
@@ -54,12 +53,30 @@ const readCSVFromS3 = () => {
           const agSensor = row[16];
           const signal = row[17];
 
-          // Combine day and timestamp into a single Date object before saving to MongoDB
-          const dateTimeString = `${day} ${timestamp}`;
-          const combinedDateTime = new Date(dateTimeString);
+          // Combine date and time into a single Date object
+          const dateTime = new Date(`${day}T${timestamp}`);
+
+          // Validate the numerical values
+          if (
+            isNaN(temperature) ||
+            isNaN(pressure) ||
+            isNaN(humidity) ||
+            isNaN(spectV) ||
+            isNaN(spectB) ||
+            isNaN(spectG) ||
+            isNaN(spectY) ||
+            isNaN(spectD) ||
+            isNaN(spectR) ||
+            isNaN(acx) ||
+            isNaN(acy) ||
+            isNaN(acz)
+          ) {
+            console.error('Invalid numerical value encountered in row:', row);
+            return;
+          }
 
           const sensorData = new SensorData({
-            date: combinedDateTime,
+            dateTime,
             temperature,
             pressure,
             humidity,
@@ -80,16 +97,16 @@ const readCSVFromS3 = () => {
 
           try {
             await sensorData.save();
-            // eslint-disable-next-line
-            console.log(`Successfully processed file: ${file.Key}`);
-          } catch (err) {
-            // eslint-disable-next-line
-            console.error('Error saving sensor data', err);
+            console.log(`Successfully processed row in file: ${file.Key}`);
+          } catch (saveError) {
+            console.error('Error saving data to MongoDB', saveError);
           }
         })
+        .on('end', () => {
+          console.log(`Successfully processed file: ${file.Key}`);
+        })
         .on('error', (err) => {
-          // eslint-disable-next-line
-          console.error('Errr processing file', err);
+          console.log('Error processing file', err);
         });
     });
   });

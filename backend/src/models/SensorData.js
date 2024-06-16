@@ -1,23 +1,23 @@
 import mongoose from 'mongoose';
 
 const SensorDataSchema = new mongoose.Schema({
-  dateTime: { type: Date },
-  temperature: { type: Number },
-  pressure: { type: Number },
-  humidity: { type: Number },
-  envSensor: { type: String },
-  spectV: { type: Number },
-  spectB: { type: Number },
-  spectG: { type: Number },
-  spectY: { type: Number },
-  spectD: { type: Number },
-  spectR: { type: Number },
-  spectSensor: { type: String },
-  acx: { type: Number },
-  acy: { type: Number },
-  acz: { type: Number },
-  agSensor: { type: String },
-  signal: { type: String }
+  dateTime: { type: Date, required: true },
+  temperature: { type: Number, required: true },
+  pressure: { type: Number, required: true },
+  humidity: { type: Number, required: true },
+  envSensor: { type: String, required: true },
+  spectV: { type: Number, required: true },
+  spectB: { type: Number, required: true },
+  spectG: { type: Number, required: true },
+  spectY: { type: Number, required: true },
+  spectD: { type: Number, required: true },
+  spectR: { type: Number, required: true },
+  spectSensor: { type: String, required: true },
+  acx: { type: Number, required: true },
+  acy: { type: Number, required: true },
+  acz: { type: Number, required: true },
+  agSensor: { type: String, required: true },
+  signal: { type: String, required: true }
 });
 
 const SensorData = mongoose.model('SensorData', SensorDataSchema);
