@@ -1,4 +1,8 @@
+import dotenv from 'dotenv';
 import AWS from 'aws-sdk';
+
+// Imports variables from .env file
+dotenv.config({ path: '../.env' });
 
 // Configure AWS with access and secret key
 AWS.config.update({
