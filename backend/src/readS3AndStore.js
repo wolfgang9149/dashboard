@@ -1,5 +1,4 @@
 import dotenv from 'dotenv';
-import mongoose from 'mongoose';
 import csv from 'csv-parser';
 import s3 from './awsConfig.js';
 import SensorData from './models/SensorData.js';
