@@ -21,6 +21,7 @@ connectDB();
 // Use mission_routes.js
 app.use('/mission', missionRouter);
 
+// This route will check for any new files in AWS S3 and transfer the data to MongoDB
 app.get('/process-data', (req, res) => {
   readCSVFromS3();
   res.send('Data processing started.');
