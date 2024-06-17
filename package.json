@@ -1,0 +1,14 @@
+{
+  "name": "rs-dashboard",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "backend:install": "npm install --prefix ./backend",
+    "frontend:install": "npm install --prefix ./frontend",
+    "prepare": "npm run backend:install && npm run frontend:install",
+    "backend:lint": "npm run lint --prefix ./backend",
+    "frontend:lint": "npm run lint --prefix ./frontend",
+    "lint": "npm run backend:lint && npm run frontend:lint"
+  }
+}

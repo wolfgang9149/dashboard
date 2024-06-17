@@ -1,49 +1,49 @@
+import { Readable } from 'stream';
 import dotenv from 'dotenv';
+import { ListObjectsV2Command, GetObjectCommand } from '@aws-sdk/client-s3';
 import csv from 'csv-parser';
-import s3 from './awsConfig.js';
 import SensorData from './models/SensorData.js';
 import TransferredFile from './models/TransferredFile.js';
+import s3Client from './s3Client.js';
 
 // Imports variables from .env file
 dotenv.config({ path: '../.env' });
 
 const bucketName = process.env.BUCKET_NAME;
-// eslint-disable-next-line
-console.log(`Reading bucket name from .env: ${bucketName}`);
 
-const readCSVFromS3 = () => {
-  const params = {
+const readCSVFromS3 = async () => {
+  const listParams = {
     Bucket: bucketName
   };
 
-  // Fetch objects from bucket
-  s3.listObjectsV2(params, async (err, data) => {
-    if (err) {
-      // eslint-disable-next-line
-      console.error('Error fetching list of files', err);
-      return;
-    }
+  try {
+    // Fetch objects from bucket
+    const data = await s3Client.send(new ListObjectsV2Command(listParams));
 
     const { Contents } = data;
-    Contents.forEach(async (file) => {
+
+    for (const file of Contents) {
       // Check if file has already been transferred
       const fileExists = await TransferredFile.findOne({ fileName: file.Key });
 
       if (fileExists) {
-        // Skip this loop if file has already been transferred
-        // eslint-disable-next-line
+        // eslint-disable-next-line no-console
         console.log(`File ${file.Key} has already been transferred`);
-        return;
+
+        continue;
       }
 
-      const fileParams = {
+      const getObjectParams = {
         Bucket: bucketName,
         Key: file.Key
       };
 
-      s3.getObject(fileParams)
-        .createReadStream()
-        .pipe(csv({ headers: false })) // CSV file does not have headers
+      const { Body } = await s3Client.send(new GetObjectCommand(getObjectParams));
+
+      const stream = Body instanceof Readable ? Body : Readable.from(Body);
+
+      stream
+        .pipe(csv({ headers: false }))
         .on('data', async (row) => {
           const day = row[0];
           const timestamp = row[1];
@@ -66,26 +66,6 @@ const readCSVFromS3 = () => {
 
           // Combine date and time into a single Date object
           const dateTime = new Date(`${day}T${timestamp}`);
-
-          // Validate the numerical values
-          if (
-            isNaN(temperature) ||
-            isNaN(pressure) ||
-            isNaN(humidity) ||
-            isNaN(spectV) ||
-            isNaN(spectB) ||
-            isNaN(spectG) ||
-            isNaN(spectY) ||
-            isNaN(spectD) ||
-            isNaN(spectR) ||
-            isNaN(acx) ||
-            isNaN(acy) ||
-            isNaN(acz)
-          ) {
-            // eslint-disable-next-line
-            console.error('Invalid numerical value encountered in row:', row);
-            return;
-          }
 
           const sensorData = new SensorData({
             dateTime,
@@ -110,25 +90,27 @@ const readCSVFromS3 = () => {
 
           try {
             await sensorData.save();
-            // eslint-disable-next-line
+            // eslint-disable-next-line no-console
             console.log(`Successfully processed row in file: ${file.Key}`);
           } catch (saveError) {
-            // eslint-disable-next-line
+            // eslint-disable-next-line no-console
             console.error('Error saving data to MongoDB', saveError);
           }
         })
         .on('end', async () => {
-          // eslint-disable-next-line
-          // Save file name to transferredFiles collection
           const transferredFile = new TransferredFile({ fileName: file.Key });
+
           await transferredFile.save();
         })
         .on('error', (err) => {
-          // eslint-disable-next-line
+          // eslint-disable-next-line no-console
           console.log('Error processing file', err);
         });
-    });
-  });
+    }
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('Error fetching list of files', err);
+  }
 };
 
 export default readCSVFromS3;
