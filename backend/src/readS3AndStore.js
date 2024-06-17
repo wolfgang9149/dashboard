@@ -84,7 +84,8 @@ const readCSVFromS3 = async () => {
             acy,
             acz,
             agSensor,
-            signal
+            signal,
+            dateAdded: new Date()
           });
 
           try {
