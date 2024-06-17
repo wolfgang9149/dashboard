@@ -27,6 +27,7 @@ const readCSVFromS3 = async () => {
       const fileExists = await TransferredFile.findOne({ fileName: file.Key });
 
       if (fileExists) {
+        // eslint-disable-next-line no-console
         console.log(`File ${file.Key} has already been transferred`);
 
         continue;
@@ -88,8 +89,10 @@ const readCSVFromS3 = async () => {
 
           try {
             await sensorData.save();
+            // eslint-disable-next-line no-console
             console.log(`Successfully processed row in file: ${file.Key}`);
           } catch (saveError) {
+            // eslint-disable-next-line no-console
             console.error('Error saving data to MongoDB', saveError);
           }
         })
@@ -99,10 +102,12 @@ const readCSVFromS3 = async () => {
           await transferredFile.save();
         })
         .on('error', (err) => {
+          // eslint-disable-next-line no-console
           console.log('Error processing file', err);
         });
     }
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error('Error fetching list of files', err);
   }
 };
