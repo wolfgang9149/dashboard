@@ -17,7 +17,8 @@ const SensorDataSchema = new mongoose.Schema({
   acy: { type: Number, required: true },
   acz: { type: Number, required: true },
   agSensor: { type: String, required: true },
-  signal: { type: String, required: true }
+  signal: { type: String, required: true },
+  dateAdded: { type: Date, default: Date.now }
 });
 
 const SensorData = mongoose.model('SensorData', SensorDataSchema);
