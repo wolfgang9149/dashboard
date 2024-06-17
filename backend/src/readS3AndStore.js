@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import csv from 'csv-parser';
 import s3 from './awsConfig.js';
 import SensorData from './models/SensorData.js';
+import TransferredFile from './models/TransferredFile.js';
 
 // Imports variables from .env file
 dotenv.config({ path: '../.env' });
@@ -16,7 +17,7 @@ const readCSVFromS3 = () => {
   };
 
   // Fetch objects from bucket
-  s3.listObjectsV2(params, (err, data) => {
+  s3.listObjectsV2(params, async (err, data) => {
     if (err) {
       // eslint-disable-next-line
       console.error('Error fetching list of files', err);
@@ -24,7 +25,17 @@ const readCSVFromS3 = () => {
     }
 
     const { Contents } = data;
-    Contents.forEach((file) => {
+    Contents.forEach(async (file) => {
+      // Check if file has already been transferred
+      const fileExists = await TransferredFile.findOne({ fileName: file.Key });
+
+      if (fileExists) {
+        // Skip this loop if file has already been transferred
+        // eslint-disable-next-line
+        console.log(`File ${file.Key} has already been transferred`);
+        return;
+      }
+
       const fileParams = {
         Bucket: bucketName,
         Key: file.Key
@@ -105,9 +116,11 @@ const readCSVFromS3 = () => {
             console.error('Error saving data to MongoDB', saveError);
           }
         })
-        .on('end', () => {
+        .on('end', async () => {
           // eslint-disable-next-line
-          console.log(`Successfully processed file: ${file.Key}`);
+          // Save file name to transferredFiles collection
+          const transferredFile = new TransferredFile({ fileName: file.Key });
+          await transferredFile.save();
         })
         .on('error', (err) => {
           // eslint-disable-next-line
