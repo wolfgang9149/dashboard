@@ -10,8 +10,8 @@ const router = express.Router();
 // Get all data request route
 router.get('/data', async (request, response) => {
   try {
-    // Retrieve all data points
-    const sensorData = await SensorData.find();
+    // Retrieve all data points in descending order
+    const sensorData = await SensorData.find().sort({ dateTime: -1 });
     response.json(sensorData);
   } catch (err) {
     // eslint-disable-next-line
@@ -20,10 +20,24 @@ router.get('/data', async (request, response) => {
   }
 });
 
+// Get all temperature data
 router.get('/data/temp', async (request, response) => {
   try {
-    // Retrieve all data points
-    const sensorData = await SensorData.find({}, ['temperature', 'dateTime']);
+    // Retrieve temperature data points in ascending order
+    const sensorData = await SensorData.find({}, ['temperature', 'dateTime']).sort({ dateTime: 1 });
+    response.json(sensorData);
+  } catch (err) {
+    // eslint-disable-next-line
+    console.error('Error fetching data', err);
+    response.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Get all humidity data
+router.get('/data/humidity', async (request, response) => {
+  try {
+    // Retrieve temperature data points in ascending order
+    const sensorData = await SensorData.find({}, ['humidity', 'dateTime']).sort({ dateTime: 1 });
     response.json(sensorData);
   } catch (err) {
     // eslint-disable-next-line
