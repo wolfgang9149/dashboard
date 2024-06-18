@@ -6,25 +6,33 @@ import TimeTab from './components/TimeTab';
 import EnvironmentSensorTab from './components/EnvironmentSensorTab';
 import TelemetrySensorTab from './components/TelemetrySensorTab';
 import TemperatureChart from './components/TemperatureChart';
+import SpectChart from './components/SpectChart';
 
 function App() {
-  const [spectData, setSpectData] = useState(null);
+  const [spectData, setSpectData] = useState([]);
   const [flightStage, setFlightStage] = useState(null);
   const [envSensor, setEnvSensor] = useState(null);
   const [teleSensor, setTeleSensor] = useState(null);
-  const [counter, setCounter] = useState(0);
   const [tempData, setTempData] = useState([])
 
   useEffect(() => {
-    getData();
+    getTempData();
+    getSpectData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [counter]);
+  }, []);
 
-  async function getData() {
+  async function getTempData() {
     const response = await fetch('http://localhost:4001/mission/data/temp');
     const data = await response.json();
-    setTempData(data.slice(-60))
+    setTempData(data)
     console.log(tempData)
+  }
+
+  async function getSpectData() {
+    const response = await fetch('http://localhost:4001/mission/data/spect');
+    const data = await response.json()
+    setSpectData(data)
+    console.log(spectData)
   }
 
   return (
@@ -47,8 +55,8 @@ function App() {
           <TelemetrySensorTab teleSensor={teleSensor} />
         </div>
       </div>
-      <SensorChart data={spectData} />
       <TemperatureChart tempData={ tempData }/>
+      <SpectChart spectData={ spectData } />
     </>
   );
 }
