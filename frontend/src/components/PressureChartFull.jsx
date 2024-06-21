@@ -14,9 +14,8 @@ import formatDateTick from '../utils/formatDateTick';
 
 const calculateMovingAverage = (data, windowSize) => {
   const movingAverageData = [];
-  let startCount = 0
 
-  for (let i = 0; i < data.length; i++) {
+  for (let i = 0; i < data.length; i += 20) {
     let sum = 0;
     let count = 0;
 
@@ -38,7 +37,7 @@ export default function PressureChartFull({ pressureData }) {
     return <div>Loading</div>;
   }
 
-  console.log(pressureData)
+
   const data = pressureData;
 
   const movingAverageData = calculateMovingAverage(pressureData, 100);
@@ -87,7 +86,7 @@ export default function PressureChartFull({ pressureData }) {
             dataKey='dateTime'
             tickFormatter={formatDateTick}
             tick={{ dy: 20, fill: 'gray' }}
-            interval={Math.ceil(data.length / 10)}
+            interval={Math.ceil(data.length / 100)}
           />
           <YAxis
             dataKey='pressure'
