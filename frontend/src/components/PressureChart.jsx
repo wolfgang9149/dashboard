@@ -53,7 +53,7 @@ export default function PressureChart({ pressureData, dataPoints }) {
 
   return (
     <>
-      <ResponsiveContainer width='100%' height='80%'>
+      <ResponsiveContainer width='100%' height='100%'>
         <LineChart
           width={730}
           height={250}

@@ -7,7 +7,6 @@ import SpectChart from './components/SpectChart';
 import HumidityChart from './components/HumidityChart';
 import PressureChart from './components/PressureChart';
 import PressureChartFull from './components/PressureChartFull';
-// import dataGetter from './utils/dataGetter.js';
 
 function App() {
   const [spectData, setSpectData] = useState([]);
@@ -59,7 +58,11 @@ function App() {
   }
 
   async function dataGetter(name) {
+    console.log('Getting data triggered');
     const response = await fetch(`http://localhost:4001/mission/data/${name}`);
+    if (!response.ok) {
+      throw new Error(`Error fetching data: ${response.statusText}`);
+    }
     const data = await response.json();
 
     const dataArr = await data.map((entry) => ({
@@ -71,6 +74,7 @@ function App() {
   }
 
   async function handleChartClick(chart, name) {
+    console.log('Chart clicked, expanding');
     await dataGetter(name);
     setIsFullScreen(true);
     setFullScreenChart(chart);
@@ -93,24 +97,26 @@ function App() {
               className='absolute top-0 right-0 p-4 m-4 cursor-pointer text-white'
               onClick={exitFullScreen}
             >
-              Exit Full Screen
+              <img src='close-icon.svg' className='h-[3rem]' />
             </div>
           </div>
         </div>
       )}
-      <div className='grid grid-cols-3 grid-rows-[25vh_25vh_30vh] gap-2 p-2 lg:p-8 bg-[#13253f] border-2'>
+      <div className='grid grid-cols-3 grid-rows-[30vh_30vh_30vh] gap-2 p-2 lg:p-8 bg-[#13253f] border-2'>
         <div className='h-[300px]'>
           <div className='bg-gray-300'>Image placeholder</div>
         </div>
         <div className='col-start-3 col-span-1 row-span-1 flex flex-col text-center'>
-          <h3
-            className='text-white text-[1.5rem] my-2'
-            onClick={() =>
-              handleChartClick(<PressureChartFull pressureData={fullData} />, 'pressure')
-            }
-          >
-            Pressure/Time Graph
-          </h3>
+          <div className='flex relative justify-center align-middle place-items-center'>
+            <h3 className='text-white text-[1.5rem] my-2'>Pressure/Time Graph</h3>
+            <img
+              src='expand-icon.svg'
+              className='h-[25px] px-2 cursor-pointer absolute right-[20px]'
+              onClick={() =>
+                handleChartClick(<PressureChartFull pressureData={fullData} />, 'pressure')
+              }
+            />
+          </div>
           <PressureChart pressureData={pressureData} dataPoints={20} />
         </div>
         <div className='col-start-3 col-span-1 row-span-1 flex flex-col text-center'>
@@ -122,7 +128,7 @@ function App() {
           <TemperatureChart tempData={tempData} />
         </div>
         <div className='col-start-1 col-span-2 row-span-2 row-start-3 flex flex-col text-center'>
-          <h3 className='text-white text-[1.5rem] my-2'>Spectral Chart</h3>
+          <h3 className='text-white text-[1.5rem] my-2'>Spectral Graph</h3>
           <SpectChart spectData={spectData} />
         </div>
       </div>

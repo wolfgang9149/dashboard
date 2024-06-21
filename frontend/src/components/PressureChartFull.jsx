@@ -14,6 +14,7 @@ import formatDateTick from '../utils/formatDateTick';
 
 const calculateMovingAverage = (data, windowSize) => {
   const movingAverageData = [];
+  let startCount = 0
 
   for (let i = 0; i < data.length; i++) {
     let sum = 0;
@@ -79,7 +80,7 @@ export default function PressureChartFull({ pressureData }) {
           width={730}
           height={250}
           data={data}
-          margin={{ top: 5, right: 30, left: 20, bottom: 30 }}
+          margin={{ top: 25, right: 30, left: 20, bottom: 30 }}
         >
           <CartesianGrid strokeDasharray='3 3' stroke='#5d5e5e' />
           <XAxis
@@ -90,7 +91,7 @@ export default function PressureChartFull({ pressureData }) {
           />
           <YAxis
             dataKey='pressure'
-            tick={{ fill: 'gray' }}
+            tick={{ fill: 'gray', dy: -15 }}
             angle={-45}
             domain={[minPressure, 'auto']}
           >
