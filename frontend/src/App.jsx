@@ -70,14 +70,21 @@ function App() {
       [name]: entry[name]
     }));
 
-    setFullData(dataArr);
+    return dataArr;
   }
 
-  async function handleChartClick(chart, name) {
+  async function handleChartClick(name) {
     console.log('Chart clicked, expanding');
-    await dataGetter(name);
+    const fetchedData = await dataGetter(name);
+    setFullData(fetchedData);
+
+    switch (name) {
+      case 'pressure':
+        setFullScreenChart(() => <PressureChartFull pressureData={fetchedData} />);
+        break;
+    }
+
     setIsFullScreen(true);
-    setFullScreenChart(chart);
     console.log(fullData);
   }
 
@@ -112,9 +119,7 @@ function App() {
             <img
               src='expand-icon.svg'
               className='h-[25px] px-2 cursor-pointer absolute right-[20px]'
-              onClick={() =>
-                handleChartClick(<PressureChartFull pressureData={fullData} />, 'pressure')
-              }
+              onClick={() => handleChartClick('pressure')}
             />
           </div>
           <PressureChart pressureData={pressureData} dataPoints={20} />
