@@ -12,18 +12,36 @@ import {
 } from 'recharts';
 import formatDateTick from '../utils/formatDateTick';
 
-export default function PressureChart({ pressureData, dataPoints }) {
-  let data;
+const calculateMovingAverage = (data, windowSize) => {
+  const movingAverageData = [];
 
-  if (dataPoints) {
-    data = pressureData.slice(-dataPoints);
-  } else {
-    data = pressureData;
+  for (let i = 0; i < data.length; i++) {
+    let sum = 0;
+    let count = 0;
+
+    for (let j = Math.max(0, i - windowSize + 1); j <= i; j++) {
+      sum += data[j].pressure;
+      count++;
+    }
+
+    const average = sum / count;
+    movingAverageData.push({ dateTime: data[i].dateTime, pressure: average });
   }
 
-  console.log(data);
+  return movingAverageData;
+};
 
-  const minPressure = Math.min(...data.map((entry) => entry.pressure));
+export default function PressureChartFull({ pressureData }) {
+  if (!pressureData) {
+    // Loading placeholder so things don't break
+    return <div>Loading</div>;
+  }
+
+  console.log(pressureData)
+  const data = pressureData;
+
+  const movingAverageData = calculateMovingAverage(pressureData, 100);
+  const minPressure = Math.min(...movingAverageData.map((entry) => entry.pressure));
 
   // Custom tooltip formatter (optional, for better formatting)
   const CustomTooltip = ({ active, payload, label }) => {
@@ -53,23 +71,26 @@ export default function PressureChart({ pressureData, dataPoints }) {
 
   return (
     <>
-      <ResponsiveContainer width='100%' height='80%'>
+      <div className='text-center'>
+        <h1 className='text-[2rem] text-white'>Pressure/Time Graph</h1>
+      </div>
+      <ResponsiveContainer width='100%' height='95%'>
         <LineChart
           width={730}
           height={250}
           data={data}
-          margin={{ top: 15, right: 30, left: 20, bottom: 30 }}
+          margin={{ top: 5, right: 30, left: 20, bottom: 30 }}
         >
           <CartesianGrid strokeDasharray='3 3' stroke='#5d5e5e' />
           <XAxis
             dataKey='dateTime'
             tickFormatter={formatDateTick}
-            tick={{ dy: 15, fill: 'gray' }}
-            interval={Math.ceil(data.length / 5)}
+            tick={{ dy: 20, fill: 'gray' }}
+            interval={Math.ceil(data.length / 10)}
           />
           <YAxis
             dataKey='pressure'
-            tick={{ fill: 'gray', dy: -12 }}
+            tick={{ fill: 'gray' }}
             angle={-45}
             domain={[minPressure, 'auto']}
           >
@@ -77,7 +98,13 @@ export default function PressureChart({ pressureData, dataPoints }) {
           </YAxis>
           <Tooltip content={CustomTooltip} />
           {/* <Legend /> */}
-          <Line type='monotone' dataKey='pressure' stroke='#fff' dot={false} />
+          <Line
+            type='monotone'
+            data={movingAverageData}
+            dataKey='pressure'
+            stroke='#fff'
+            dot={false}
+          />
         </LineChart>
       </ResponsiveContainer>
     </>

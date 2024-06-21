@@ -6,12 +6,17 @@ import TemperatureChart from './components/TemperatureChart';
 import SpectChart from './components/SpectChart';
 import HumidityChart from './components/HumidityChart';
 import PressureChart from './components/PressureChart';
+import PressureChartFull from './components/PressureChartFull';
+// import dataGetter from './utils/dataGetter.js';
 
 function App() {
   const [spectData, setSpectData] = useState([]);
   const [tempData, setTempData] = useState([]);
   const [humidityData, setHumidityData] = useState([]);
   const [pressureData, setPressureData] = useState([]);
+  const [isFullScreen, setIsFullScreen] = useState(null);
+  const [fullScreenChart, setFullScreenChart] = useState(null);
+  const [fullData, setFullData] = useState([]);
 
   useEffect(() => {
     getData();
@@ -34,7 +39,7 @@ function App() {
 
     const pressureArr = data.map((entry) => ({
       dateTime: entry.dateTime,
-      pressure: entry.pressure / 1000
+      pressure: entry.pressure
     }));
 
     const spectArr = data.map((entry) => ({
@@ -53,24 +58,60 @@ function App() {
     setSpectData(spectArr);
   }
 
+  async function dataGetter(name) {
+    const response = await fetch(`http://localhost:4001/mission/data/${name}`);
+    const data = await response.json();
+
+    const dataArr = await data.map((entry) => ({
+      dateTime: entry.dateTime,
+      [name]: entry[name]
+    }));
+
+    setFullData(dataArr);
+  }
+
+  async function handleChartClick(chart, name) {
+    await dataGetter(name);
+    setIsFullScreen(true);
+    setFullScreenChart(chart);
+    console.log(fullData);
+  }
+
+  function exitFullScreen() {
+    setIsFullScreen(false);
+    setFullScreenChart(null);
+  }
+
   return (
     <>
       <Navbar />
-      <div className='grid grid-cols-3 grid-rows-[325px_325px_500px] gap-2 p-2 lg:p-8 bg-[#13253f]'>
+      {isFullScreen && (
+        <div className='flex justify-center'>
+          <div className='fixed top-[5vh] p-16 w-[90vw] h-[90vh] bg-[#0c1625] z-50'>
+            {fullScreenChart}
+            <div
+              className='absolute top-0 right-0 p-4 m-4 cursor-pointer text-white'
+              onClick={exitFullScreen}
+            >
+              Exit Full Screen
+            </div>
+          </div>
+        </div>
+      )}
+      <div className='grid grid-cols-3 grid-rows-[25vh_25vh_30vh] gap-2 p-2 lg:p-8 bg-[#13253f] border-2'>
         <div className='h-[300px]'>
           <div className='bg-gray-300'>Image placeholder</div>
         </div>
-        {/* <div className='flex'>
-          <div className='col-start-3 col-span-1 row-span-1 flex justify-center'>
-            <TimeTab />
-          </div>
-          <div className='col-start-3 col-span-1 row-span-1  flex justify-center'>
-            <FlightStageTab />
-          </div>
-        </div> */}
         <div className='col-start-3 col-span-1 row-span-1 flex flex-col text-center'>
-          <h3 className='text-white text-[1.5rem] my-2'>Pressure/Time Graph</h3>
-          <PressureChart pressureData={pressureData} />
+          <h3
+            className='text-white text-[1.5rem] my-2'
+            onClick={() =>
+              handleChartClick(<PressureChartFull pressureData={fullData} />, 'pressure')
+            }
+          >
+            Pressure/Time Graph
+          </h3>
+          <PressureChart pressureData={pressureData} dataPoints={20} />
         </div>
         <div className='col-start-3 col-span-1 row-span-1 flex flex-col text-center'>
           <h3 className='text-white text-[1.5rem] my-2'>Humidity/Time Graph</h3>
@@ -85,8 +126,6 @@ function App() {
           <SpectChart spectData={spectData} />
         </div>
       </div>
-
-
     </>
   );
 }

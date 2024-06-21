@@ -43,7 +43,7 @@ export default function HumidityChart({ humidityData }) {
 
   return (
     <>
-      <ResponsiveContainer width='100%' height={300}>
+      <ResponsiveContainer width='100%' height={250}>
         <LineChart
           width={730}
           height={250}
@@ -57,12 +57,12 @@ export default function HumidityChart({ humidityData }) {
             tick={{ dy: 10, fill: 'gray' }}
             interval={Math.ceil(data.length / 5)}
           />
-          <YAxis dataKey='humidity' tick={{ fill: 'gray' }}>
+          <YAxis dataKey='humidity' tick={{ fill: 'gray' }} angle={-45}>
             <Label value={'Humidity (%)'} angle={-90} fill='white' dx={-15} />
           </YAxis>
           <Tooltip content={CustomTooltip} />
           {/* <Legend /> */}
-          <Line type='monotone' dataKey='humidity' stroke='#fff' />
+          <Line type='monotone' dataKey='humidity' stroke='#fff' dot={false}/>
         </LineChart>
       </ResponsiveContainer>
     </>
