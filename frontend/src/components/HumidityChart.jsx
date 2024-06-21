@@ -11,8 +11,9 @@ import {
 } from 'recharts';
 import formatDateTick from '../utils/formatDateTick';
 
-export default function TemperatureChart({ tempData }) {
-  const data = tempData.slice(-50);
+export default function HumidityChart({ humidityData }) {
+  console.log('In humidity chart', humidityData);
+  const data = humidityData.slice(-50);
 
   return (
     <>
@@ -30,10 +31,10 @@ export default function TemperatureChart({ tempData }) {
             tick={{ dy: 10, fill: 'white' }}
             interval={Math.ceil(data.length / 5)}
           />
-          <YAxis dataKey='temperature' tick={{ fill: 'white' }} />
+          <YAxis dataKey='humidity' tick={{ fill: 'white' }} />
           <Tooltip />
           {/* <Legend /> */}
-          <Line type='monotone' dataKey='temperature' stroke='#fff' />
+          <Line type='monotone' dataKey='humidity' stroke='#fff' />
         </LineChart>
       </ResponsiveContainer>
     </>
