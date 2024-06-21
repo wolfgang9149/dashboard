@@ -13,8 +13,9 @@ router.get('/data', async (request, response) => {
   const limit = parseInt(request.query.limit);
   try {
     // Retrieve all data points in descending order
-    const sensorData = await SensorData.find().sort({ dateTime: 1 }).limit(limit);
-    response.json(sensorData);
+    const sensorData = await SensorData.find().sort({ dateTime: -1 }).limit(limit);
+    const latestSensorData = sensorData.reverse();
+    response.json(latestSensorData);
   } catch (err) {
     // eslint-disable-next-line
     console.error('Error fetching data', err);
@@ -73,7 +74,7 @@ router.get('/data/spect', async (request, response) => {
 router.get('/data/pressure', async (request, response) => {
   try {
     // Retrieve pressure data points in ascending order
-    const sensorData = await SensorData.find({}, 'pressure').sort({ dateTime: 1 });
+    const sensorData = await SensorData.find({}, ['pressure', 'dateTime']).sort({ dateTime: 1 });
     response.json(sensorData);
   } catch (err) {
     console.error('Error fetching data', err);
