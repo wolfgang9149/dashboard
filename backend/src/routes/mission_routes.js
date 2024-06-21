@@ -9,9 +9,11 @@ const router = express.Router();
 
 // Get all data request route
 router.get('/data', async (request, response) => {
+  // Add limiter to query i.e. /mission/data?limit=50 will only return 50 latest data points
+  const limit = parseInt(request.query.limit);
   try {
     // Retrieve all data points in descending order
-    const sensorData = await SensorData.find().sort({ dateTime: -1 });
+    const sensorData = await SensorData.find().sort({ dateTime: 1 }).limit(limit);
     response.json(sensorData);
   } catch (err) {
     // eslint-disable-next-line
