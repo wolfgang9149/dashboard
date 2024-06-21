@@ -7,6 +7,7 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  Label,
   ResponsiveContainer
 } from 'recharts';
 import formatDateTick from '../utils/formatDateTick';
@@ -27,10 +28,16 @@ export default function TemperatureChart({ tempData }) {
           <XAxis
             dataKey='dateTime'
             tickFormatter={formatDateTick}
-            tick={{ dy: 10, fill: 'white' }}
+            tick={{ dy: 10, fill: 'gray' }}
             interval={Math.ceil(data.length / 5)}
           />
-          <YAxis dataKey='temperature' tick={{ fill: 'white' }} />
+          <YAxis dataKey='temperature' tick={{ fill: 'gray' }}>
+            <Label 
+            value={'Temperature (°C)'}
+            angle={-90}
+            fill='white'
+            dx={-15}/>
+          </YAxis>
           <Tooltip />
           {/* <Legend /> */}
           <Line type='monotone' dataKey='temperature' stroke='#fff' />

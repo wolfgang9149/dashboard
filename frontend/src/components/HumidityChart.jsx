@@ -7,6 +7,7 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  Label,
   ResponsiveContainer
 } from 'recharts';
 import formatDateTick from '../utils/formatDateTick';
@@ -28,10 +29,12 @@ export default function HumidityChart({ humidityData }) {
           <XAxis
             dataKey='dateTime'
             tickFormatter={formatDateTick}
-            tick={{ dy: 10, fill: 'white' }}
+            tick={{ dy: 10, fill: 'gray' }}
             interval={Math.ceil(data.length / 5)}
           />
-          <YAxis dataKey='humidity' tick={{ fill: 'white' }} />
+          <YAxis dataKey='humidity' tick={{ fill: 'gray' }}>
+            <Label value={'Humidity (%)'} angle={-90} fill='white' dx={-15} />
+          </YAxis>
           <Tooltip />
           {/* <Legend /> */}
           <Line type='monotone' dataKey='humidity' stroke='#fff' />

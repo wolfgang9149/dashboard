@@ -28,10 +28,10 @@ export default function SpectChart({ spectData }) {
           <XAxis
             dataKey='dateTime'
             tickFormatter={formatDateTick}
-            tick={{ dy: 10, fill: 'white' }}
+            tick={{ dy: 10, fill: 'gray' }}
             interval={Math.ceil(data.length / 10)}
           />
-          <YAxis tick={{ fill: 'white' }} />
+          <YAxis tick={{ fill: 'gray' }} />
           <Tooltip />
           <Legend
             verticalAlign='bottom'
