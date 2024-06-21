@@ -57,12 +57,12 @@ export default function TemperatureChart({ tempData }) {
             tick={{ dy: 10, fill: 'gray' }}
             interval={Math.ceil(data.length / 5)}
           />
-          <YAxis dataKey='temperature' tick={{ fill: 'gray' }}>
+          <YAxis dataKey='temperature' tick={{ fill: 'gray' }} angle={-45}>
             <Label value={'Temperature (°C)'} angle={-90} fill='white' dx={-15} />
           </YAxis>
           <Tooltip content={<CustomTooltip />} />
           {/* <Legend /> */}
-          <Line type='monotone' dataKey='temperature' stroke='#fff' />
+          <Line type='monotone' dataKey='temperature' stroke='#fff' dot={false}/>
         </LineChart>
       </ResponsiveContainer>
     </>
