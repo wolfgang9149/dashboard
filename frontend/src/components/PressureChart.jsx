@@ -12,8 +12,8 @@ import {
 } from 'recharts';
 import formatDateTick from '../utils/formatDateTick';
 
-export default function HumidityChart({ humidityData }) {
-  const data = humidityData.slice(-20);
+export default function PressureChart({ pressureData }) {
+  const data = pressureData.slice(-20);
 
   // Custom tooltip formatter (optional, for better formatting)
   const CustomTooltip = ({ active, payload, label }) => {
@@ -33,7 +33,7 @@ export default function HumidityChart({ humidityData }) {
           }}
         >
           <p className='label'>{`Time: ${time}`}</p>
-          <p className='data'>{`Humidity: ${payload[0].value.toFixed(2)}%`}</p>
+          <p className='data'>{`Pressure: ${payload[0].value.toFixed(2)}kPA`}</p>
         </div>
       );
     }
@@ -57,12 +57,12 @@ export default function HumidityChart({ humidityData }) {
             tick={{ dy: 10, fill: 'gray' }}
             interval={Math.ceil(data.length / 5)}
           />
-          <YAxis dataKey='humidity' tick={{ fill: 'gray' }}>
-            <Label value={'Humidity (%)'} angle={-90} fill='white' dx={-15} />
+          <YAxis dataKey='pressure' tick={{ fill: 'gray' }}>
+            <Label value={'Pressure (kPA)'} angle={-90} fill='white' dx={-15} />
           </YAxis>
           <Tooltip content={CustomTooltip} />
           {/* <Legend /> */}
-          <Line type='monotone' dataKey='humidity' stroke='#fff' />
+          <Line type='monotone' dataKey='pressure' stroke='#fff' />
         </LineChart>
       </ResponsiveContainer>
     </>
