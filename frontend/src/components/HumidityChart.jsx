@@ -43,7 +43,7 @@ export default function HumidityChart({ humidityData }) {
 
   return (
     <>
-      <ResponsiveContainer width='100%' height={250}>
+      <ResponsiveContainer width='100%' height='100%'>
         <LineChart
           width={730}
           height={250}
