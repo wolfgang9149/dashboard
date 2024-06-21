@@ -50,10 +50,30 @@ router.get('/data/humidity', async (request, response) => {
 router.get('/data/spect', async (request, response) => {
   try {
     // Retrieve temperature data points in ascending order
-    const sensorData = await SensorData.find({}, ['spectV', 'spectB', 'spectG', 'spectY', 'spectD', 'spectR', 'dateTime']).sort({ dateTime: 1 });
+    const sensorData = await SensorData.find({}, [
+      'spectV',
+      'spectB',
+      'spectG',
+      'spectY',
+      'spectD',
+      'spectR',
+      'dateTime'
+    ]).sort({ dateTime: 1 });
     response.json(sensorData);
   } catch (err) {
     // eslint-disable-next-line
+    console.error('Error fetching data', err);
+    response.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Get all pressure data
+router.get('/data/pressure', async (request, response) => {
+  try {
+    // Retrieve pressure data points in ascending order
+    const sensorData = await SensorData.find({}, 'pressure').sort({ dateTime: 1 });
+    response.json(sensorData);
+  } catch (err) {
     console.error('Error fetching data', err);
     response.status(500).json({ message: 'Internal server error' });
   }
