@@ -10,16 +10,21 @@ import {
   Label,
   ResponsiveContainer
 } from 'recharts';
-import formatDateTick from '../utils/formatDateTick';
+import formatDateTick from '../services/formatDateTick';
+import { format, addHours } from 'date-fns'
 
 export default function TemperatureChart({ tempData }) {
   const data = tempData.slice(-20);
 
   // Custom tooltip formatter (optional, for better formatting)
   const CustomTooltip = ({ active, payload, label }) => {
+  
     let time;
     if (label) {
-      time = label.split('T')[1].split('.')[0];
+      const utcDate = new Date(label)
+      const timeString = String(utcDate)
+      const timeOnly = timeString.split(" ")
+      time = timeOnly[4]
     }
 
     if (active && payload && payload.length) {
@@ -43,6 +48,7 @@ export default function TemperatureChart({ tempData }) {
 
   return (
     <>
+      <h3 className='text-white text-[1.5rem] my-2'>Temperature/Time Graph</h3>
       <ResponsiveContainer width='100%' height='90%'>
         <LineChart
           width={730}
@@ -62,7 +68,7 @@ export default function TemperatureChart({ tempData }) {
           </YAxis>
           <Tooltip content={<CustomTooltip />} />
           {/* <Legend /> */}
-          <Line type='monotone' dataKey='temperature' stroke='#fff' dot={false}/>
+          <Line type='monotone' dataKey='temperature' stroke='#fff' dot={false} />
         </LineChart>
       </ResponsiveContainer>
     </>

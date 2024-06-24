@@ -9,7 +9,7 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts';
-import formatDateTick from '../utils/formatDateTick';
+import formatDateTick from '../services/formatDateTick';
 
 export default function SpectChart({ spectData }) {
   const data = spectData.slice(-50);
@@ -47,6 +47,7 @@ export default function SpectChart({ spectData }) {
 
   return (
     <>
+      <h3 className='text-white text-[1.5rem] my-2'>Spectral Graph</h3>
       <ResponsiveContainer width='100%' height='100%'>
         <LineChart
           width={730}
