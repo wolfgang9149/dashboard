@@ -7,6 +7,7 @@ import SpectChart from './components/SpectChart';
 import HumidityChart from './components/HumidityChart';
 import PressureChart from './components/PressureChart';
 import PressureChartFull from './components/PressureChartFull';
+import HumidityChartFull from './components/HumidityChartFull';
 
 function App() {
   const [spectData, setSpectData] = useState([]);
@@ -57,7 +58,8 @@ function App() {
     setSpectData(spectArr);
   }
 
-  async function dataGetter(name) {
+  // Call individual API endpoints for full data set for sensor type, passed in as sensor 'name'
+  async function getFullSensorData(name) {
     console.log('Getting data triggered');
     const response = await fetch(`http://localhost:4001/mission/data/${name}`);
     if (!response.ok) {
@@ -73,15 +75,18 @@ function App() {
     return dataArr;
   }
 
+  // Expand chart to full screen onClick function
   async function handleChartClick(name) {
     console.log('Chart clicked, expanding');
-    const fetchedData = await dataGetter(name);
+    const fetchedData = await getFullSensorData(name);
     setFullData(fetchedData);
 
     switch (name) {
       case 'pressure':
         setFullScreenChart(() => <PressureChartFull pressureData={fetchedData} />);
         break;
+      case 'humidity':
+        setFullScreenChart(() => <HumidityChartFull humidityData={fetchedData} />);
     }
 
     setIsFullScreen(true);
@@ -114,26 +119,19 @@ function App() {
           <div className='bg-gray-300'>Image placeholder</div>
         </div>
         <div className='col-start-3 col-span-1 row-span-1 flex flex-col text-center'>
-          <div className='flex relative justify-center align-middle place-items-center'>
-            <h3 className='text-white text-[1.5rem] my-2'>Pressure/Time Graph</h3>
-            <img
-              src='expand-icon.svg'
-              className='h-[25px] px-2 cursor-pointer absolute right-[20px]'
-              onClick={() => handleChartClick('pressure')}
-            />
-          </div>
-          <PressureChart pressureData={pressureData} dataPoints={20} />
+          <PressureChart
+            pressureData={pressureData}
+            dataPoints={20}
+            handleChartClick={handleChartClick}
+          />
         </div>
         <div className='col-start-3 col-span-1 row-span-1 flex flex-col text-center'>
-          <h3 className='text-white text-[1.5rem] my-2'>Humidity/Time Graph</h3>
-          <HumidityChart humidityData={humidityData} />
+          <HumidityChart humidityData={humidityData} handleChartClick={handleChartClick}/>
         </div>
         <div className='col-start-3 col-span-1 row-span-1 flex flex-col text-center'>
-          <h3 className='text-white text-[1.5rem] my-2'>Temperature/Time Graph</h3>
           <TemperatureChart tempData={tempData} />
         </div>
         <div className='col-start-1 col-span-2 row-span-2 row-start-3 flex flex-col text-center'>
-          <h3 className='text-white text-[1.5rem] my-2'>Spectral Graph</h3>
           <SpectChart spectData={spectData} />
         </div>
       </div>

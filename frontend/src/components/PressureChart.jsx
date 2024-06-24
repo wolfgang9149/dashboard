@@ -10,9 +10,9 @@ import {
   Label,
   ResponsiveContainer
 } from 'recharts';
-import formatDateTick from '../utils/formatDateTick';
+import formatDateTick from '../services/formatDateTick';
 
-export default function PressureChart({ pressureData, dataPoints }) {
+export default function PressureChart({ pressureData, dataPoints, handleChartClick }) {
   let data;
 
   if (dataPoints) {
@@ -29,7 +29,10 @@ export default function PressureChart({ pressureData, dataPoints }) {
   const CustomTooltip = ({ active, payload, label }) => {
     let time;
     if (label) {
-      time = label.split('T')[1].split('.')[0];
+      const utcDate = new Date(label)
+      const timeString = String(utcDate)
+      const timeOnly = timeString.split(" ")
+      time = timeOnly[4]
     }
 
     if (active && payload && payload.length) {
@@ -53,6 +56,12 @@ export default function PressureChart({ pressureData, dataPoints }) {
 
   return (
     <>
+      <h3 className='text-white text-[1.5rem] my-2'>Pressure/Time Graph</h3>
+      <img
+        src='expand-icon.svg'
+        className='h-[25px] px-2 cursor-pointer absolute right-[20px]'
+        onClick={() => handleChartClick('pressure')}
+      />
       <ResponsiveContainer width='100%' height='100%'>
         <LineChart
           width={730}

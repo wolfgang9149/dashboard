@@ -15,32 +15,32 @@ import formatDateTick from '../services/formatDateTick';
 const calculateMovingAverage = (data, windowSize) => {
   const movingAverageData = [];
 
-  for (let i = 0; i < data.length; i += 20) {
+  for (let i = 0; i < data.length; i += 10) {
     let sum = 0;
     let count = 0;
 
     for (let j = Math.max(0, i - windowSize + 1); j <= i; j++) {
-      sum += data[j].pressure;
+      sum += data[j].humidity;
       count++;
     }
 
     const average = sum / count;
-    movingAverageData.push({ dateTime: data[i].dateTime, pressure: average });
+    movingAverageData.push({ dateTime: data[i].dateTime, humidity: average });
   }
 
   return movingAverageData;
 };
 
-export default function PressureChartFull({ pressureData }) {
-  if (!pressureData) {
+export default function HumidityChartFull({ humidityData }) {
+  if (!humidityData) {
     // Loading placeholder so things don't break
     return <div>Loading</div>;
   }
 
-  const data = pressureData;
+  const data = humidityData;
 
-  const movingAverageData = calculateMovingAverage(pressureData, 100);
-  const minPressure = Math.min(...movingAverageData.map((entry) => entry.pressure));
+  const movingAverageData = calculateMovingAverage(humidityData, 10);
+  const minHumidity = Math.min(...movingAverageData.map((entry) => entry.humidity));
 
   // Custom tooltip formatter (for better formatting)
   const CustomTooltip = ({ active, payload, label }) => {
@@ -63,7 +63,7 @@ export default function PressureChartFull({ pressureData }) {
           }}
         >
           <p className='label'>{`Time: ${time}`}</p>
-          <p className='data'>{`Pressure: ${payload[0].value.toLocaleString()} Pa`}</p>
+          <p className='data'>{`Humidity: ${payload[0].value.toFixed(2).toLocaleString()} %`}</p>
         </div>
       );
     }
@@ -74,7 +74,7 @@ export default function PressureChartFull({ pressureData }) {
   return (
     <>
       <div className='text-center'>
-        <h1 className='text-[2rem] text-white'>Pressure/Time Graph</h1>
+        <h1 className='text-[2rem] text-white'>Humidity/Time Graph</h1>
       </div>
       <ResponsiveContainer width='100%' height='95%'>
         <LineChart
@@ -91,19 +91,19 @@ export default function PressureChartFull({ pressureData }) {
             interval={Math.ceil(data.length / 100)}
           />
           <YAxis
-            dataKey='pressure'
+            dataKey='humidity'
             tick={{ fill: 'gray', dy: -15 }}
             angle={-45}
-            domain={[minPressure, 'auto']}
+            domain={[minHumidity, 'auto']}
           >
-            <Label value={'Pressure Pa'} angle={-90} fill='white' dx={-30} />
+            <Label value={'Humidity %'} angle={-90} fill='white' dx={-30} />
           </YAxis>
           <Tooltip content={CustomTooltip} />
           {/* <Legend /> */}
           <Line
             type='monotone'
             data={movingAverageData}
-            dataKey='pressure'
+            dataKey='humidity'
             stroke='#fff'
             dot={false}
           />
