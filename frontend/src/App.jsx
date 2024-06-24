@@ -69,7 +69,7 @@ function App() {
     }
     const data = await response.json();
 
-    let dataArr = []
+    let dataArr = [];
 
     if (name === 'spect') {
       dataArr = await data.map((entry) => ({
@@ -80,7 +80,7 @@ function App() {
         spectY: entry.spectY,
         spectD: entry.spectD,
         spectR: entry.spectR
-      }))
+      }));
     } else {
       dataArr = await data.map((entry) => ({
         dateTime: entry.dateTime,
@@ -88,33 +88,37 @@ function App() {
       }));
     }
 
-
     return dataArr;
   }
 
   // Expand chart to full screen onClick function
   async function handleChartClick(name) {
     console.log('Chart clicked, expanding');
-    const fetchedData = await getFullSensorData(name);
-    setFullData(fetchedData);
+    try {
+      const fetchedData = await getFullSensorData(name);
+      setFullData(fetchedData);
 
-    switch (name) {
-      case 'pressure':
-        setFullScreenChart(() => <PressureChartFull pressureData={fetchedData} />);
-        break;
-      case 'humidity':
-        setFullScreenChart(() => <HumidityChartFull humidityData={fetchedData} />);
-        break;
-      case 'temperature':
-        setFullScreenChart(() => <TemperatureChartFull temperatureData={fetchedData} />);
-        break;
-      case 'spect':
-        setFullScreenChart(() => <SpectChartFull spectData={fetchedData} />);
-        break;
+      switch (name) {
+        case 'pressure':
+          setFullScreenChart(() => <PressureChartFull pressureData={fetchedData} />);
+          break;
+        case 'humidity':
+          setFullScreenChart(() => <HumidityChartFull humidityData={fetchedData} />);
+          break;
+        case 'temperature':
+          setFullScreenChart(() => <TemperatureChartFull temperatureData={fetchedData} />);
+          break;
+        case 'spect':
+          setFullScreenChart(() => <SpectChartFull spectData={fetchedData} />);
+          break;
+      }
+
+      setIsFullScreen(true);
+    } catch (err) {
+      alert('Error fetching data; please try again');
+      return;
     }
 
-    setIsFullScreen(true);
-    console.log(fullData);
   }
 
   function exitFullScreen() {
@@ -150,10 +154,10 @@ function App() {
           />
         </div>
         <div className='col-start-3 col-span-1 row-span-1 flex flex-col text-center'>
-          <HumidityChart humidityData={humidityData} handleChartClick={handleChartClick}/>
+          <HumidityChart humidityData={humidityData} handleChartClick={handleChartClick} />
         </div>
         <div className='col-start-3 col-span-1 row-span-1 flex flex-col text-center'>
-          <TemperatureChart tempData={tempData} handleChartClick={handleChartClick}/>
+          <TemperatureChart tempData={tempData} handleChartClick={handleChartClick} />
         </div>
         <div className='col-start-1 col-span-2 row-span-2 row-start-3 flex flex-col text-center'>
           <SpectChart spectData={spectData} handleChartClick={handleChartClick} />
