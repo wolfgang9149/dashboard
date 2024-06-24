@@ -87,12 +87,12 @@ export default function SpectChartFull({ spectData }) {
           }}
         >
           <p className='label'>{`Time: ${time}`}</p>
-          <p className='data'>{`Violet: ${payload[0].value.toFixed(2)}`}</p>
-          <p className='data'>{`Blue: ${payload[1].value.toFixed(2)}`}</p>
-          <p className='data'>{`Green: ${payload[2].value.toFixed(2)}`}</p>
-          <p className='data'>{`Yellow: ${payload[3].value.toFixed(2)}`}</p>
-          <p className='data'>{`Orange: ${payload[4].value.toFixed(2)}`}</p>
-          <p className='data'>{`Red: ${payload[5].value.toFixed(2)}`}</p>
+          <p className='data'>{`Violet (450nm): ${payload[0].value.toFixed(2)}`}</p>
+          <p className='data'>{`Blue (500nm): ${payload[1].value.toFixed(2)}`}</p>
+          <p className='data'>{`Green (550nm): ${payload[2].value.toFixed(2)}`}</p>
+          <p className='data'>{`Yellow (570nm): ${payload[3].value.toFixed(2)}`}</p>
+          <p className='data'>{`Orange (600nm): ${payload[4].value.toFixed(2)}`}</p>
+          <p className='data'>{`Red (650nm): ${payload[5].value.toFixed(2)}`}</p>
         </div>
       );
     }
