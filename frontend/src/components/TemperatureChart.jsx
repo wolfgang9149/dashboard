@@ -13,7 +13,7 @@ import {
 import formatDateTick from '../services/formatDateTick';
 import { format, addHours } from 'date-fns'
 
-export default function TemperatureChart({ tempData }) {
+export default function TemperatureChart({ tempData, handleChartClick }) {
   const data = tempData.slice(-20);
 
   // Custom tooltip formatter (optional, for better formatting)
@@ -48,7 +48,14 @@ export default function TemperatureChart({ tempData }) {
 
   return (
     <>
-      <h3 className='text-white text-[1.5rem] my-2'>Temperature/Time Graph</h3>
+      <div className="relative">
+        <h3 className='text-white text-[1.5rem] my-2'>Temperature/Time Graph</h3>
+        <img
+          src='expand-icon.svg'
+          className='h-[25px] px-2 cursor-pointer absolute right-[10px] top-[15px]'
+          onClick={() => handleChartClick('temperature')}
+        />
+      </div>
       <ResponsiveContainer width='100%' height='90%'>
         <LineChart
           width={730}

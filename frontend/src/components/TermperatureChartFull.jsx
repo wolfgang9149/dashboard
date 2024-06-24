@@ -15,32 +15,31 @@ import formatDateTick from '../services/formatDateTick';
 const calculateMovingAverage = (data, windowSize) => {
   const movingAverageData = [];
 
-  for (let i = 0; i < data.length; i += 20) {
+  for (let i = 0; i < data.length; i += 5) {
     let sum = 0;
     let count = 0;
 
     for (let j = Math.max(0, i - windowSize + 1); j <= i; j++) {
-      sum += data[j].pressure;
+      sum += data[j].temperature;
       count++;
     }
 
     const average = sum / count;
-    movingAverageData.push({ dateTime: data[i].dateTime, pressure: average });
+    movingAverageData.push({ dateTime: data[i].dateTime, temperature: average });
   }
 
   return movingAverageData;
 };
 
-export default function PressureChartFull({ pressureData }) {
-  if (!pressureData) {
+export default function TemperatureChartFull({ temperatureData }) {
+  if (!temperatureData) {
     // Loading placeholder so things don't break
     return <div>Loading</div>;
   }
 
-  const data = pressureData;
+  const data = temperatureData;
 
-  const movingAverageData = calculateMovingAverage(pressureData, 100);
-  const minPressure = Math.min(...movingAverageData.map((entry) => entry.pressure));
+  const movingAverageData = calculateMovingAverage(temperatureData, 50);
 
   // Custom tooltip formatter (for better formatting)
   const CustomTooltip = ({ active, payload, label }) => {
@@ -63,7 +62,7 @@ export default function PressureChartFull({ pressureData }) {
           }}
         >
           <p className='label'>{`Time: ${time}`}</p>
-          <p className='data'>{`Pressure: ${payload[0].value.toLocaleString()} Pa`}</p>
+          <p className='data'>{`Temperature: ${payload[0].value.toFixed(2)}°C`}</p>
         </div>
       );
     }
@@ -74,7 +73,7 @@ export default function PressureChartFull({ pressureData }) {
   return (
     <>
       <div className='text-center'>
-        <h1 className='text-[2rem] text-white'>Pressure/Time Graph</h1>
+        <h1 className='text-[2rem] text-white'>Temperature/Time Graph</h1>
       </div>
       <ResponsiveContainer width='100%' height='95%'>
         <LineChart
@@ -91,18 +90,17 @@ export default function PressureChartFull({ pressureData }) {
             interval={Math.ceil(data.length / 100)}
           />
           <YAxis
-            dataKey='pressure'
+            dataKey='temperature'
             tick={{ fill: 'gray', dy: -15 }}
             angle={-45}
-            domain={[minPressure, 'auto']}
           >
-            <Label value={'Pressure Pa'} angle={-90} fill='white' dx={-30} />
+            <Label value={'Temperature °C'} angle={-90} fill='white' dx={-30} />
           </YAxis>
           <Tooltip content={CustomTooltip} />
           {/* <Legend /> */}
           <Line
             type='monotone'
-            dataKey='pressure'
+            dataKey='temperature'
             stroke='#fff'
             dot={false}
           />
