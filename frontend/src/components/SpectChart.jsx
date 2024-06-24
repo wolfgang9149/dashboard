@@ -11,14 +11,17 @@ import {
 } from 'recharts';
 import formatDateTick from '../services/formatDateTick';
 
-export default function SpectChart({ spectData }) {
+export default function SpectChart({ spectData, handleChartClick }) {
   const data = spectData.slice(-50);
 
   // Custom tooltip formatter (optional, for better formatting)
   const CustomTooltip = ({ active, payload, label }) => {
     let time;
     if (label) {
-      time = label.split('T')[1].split('.')[0];
+      const utcDate = new Date(label);
+      const timeString = String(utcDate);
+      const timeOnly = timeString.split(' ');
+      time = timeOnly[4];
     }
 
     if (active && payload && payload.length) {
@@ -47,7 +50,14 @@ export default function SpectChart({ spectData }) {
 
   return (
     <>
-      <h3 className='text-white text-[1.5rem] my-2'>Spectral Graph</h3>
+      <div className="relative">
+        <h3 className='text-white text-[1.5rem] my-2'>Spectral Graph</h3>
+        <img
+          src='expand-icon.svg'
+          className='h-[25px] px-2 cursor-pointer absolute right-[20px] top-[15px]'
+          onClick={() => handleChartClick('spect')}
+        />
+      </div>
       <ResponsiveContainer width='100%' height='100%'>
         <LineChart
           width={730}

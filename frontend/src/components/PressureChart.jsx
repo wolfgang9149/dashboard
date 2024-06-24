@@ -21,18 +21,16 @@ export default function PressureChart({ pressureData, dataPoints, handleChartCli
     data = pressureData;
   }
 
-  console.log(data);
-
   const minPressure = Math.min(...data.map((entry) => entry.pressure));
 
   // Custom tooltip formatter (optional, for better formatting)
   const CustomTooltip = ({ active, payload, label }) => {
     let time;
     if (label) {
-      const utcDate = new Date(label)
-      const timeString = String(utcDate)
-      const timeOnly = timeString.split(" ")
-      time = timeOnly[4]
+      const utcDate = new Date(label);
+      const timeString = String(utcDate);
+      const timeOnly = timeString.split(' ');
+      time = timeOnly[4];
     }
 
     if (active && payload && payload.length) {
@@ -56,12 +54,14 @@ export default function PressureChart({ pressureData, dataPoints, handleChartCli
 
   return (
     <>
-      <h3 className='text-white text-[1.5rem] my-2'>Pressure/Time Graph</h3>
-      <img
-        src='expand-icon.svg'
-        className='h-[25px] px-2 cursor-pointer absolute right-[20px]'
-        onClick={() => handleChartClick('pressure')}
-      />
+      <div className="relative">
+        <h3 className='text-white text-[1.5rem] my-2'>Pressure/Time Graph</h3>
+        <img
+          src='expand-icon.svg'
+          className='h-[25px] px-2 cursor-pointer absolute right-[10px] top-[1px]'
+          onClick={() => handleChartClick('pressure')}
+        />
+      </div>
       <ResponsiveContainer width='100%' height='100%'>
         <LineChart
           width={730}

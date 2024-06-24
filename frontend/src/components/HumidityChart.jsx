@@ -46,12 +46,14 @@ export default function HumidityChart({ humidityData, handleChartClick}) {
 
   return (
     <>
-      <h3 className='text-white text-[1.5rem] my-2'>Humidity/Time Graph</h3>
-      <img
-        src='expand-icon.svg'
-        className='h-[25px] px-2 cursor-pointer absolute right-[20px]'
-        onClick={() => handleChartClick('humidity')}
-      />
+      <div className="relative">
+        <h3 className='text-white text-[1.5rem] my-2'>Humidity/Time Graph</h3>
+        <img
+          src='expand-icon.svg'
+          className='h-[25px] px-2 cursor-pointer absolute right-[10px] top-[15px]'
+          onClick={() => handleChartClick('humidity')}
+        />
+      </div>
       <ResponsiveContainer width='100%' height='100%'>
         <LineChart
           width={730}

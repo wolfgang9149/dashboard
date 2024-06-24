@@ -8,6 +8,8 @@ import HumidityChart from './components/HumidityChart';
 import PressureChart from './components/PressureChart';
 import PressureChartFull from './components/PressureChartFull';
 import HumidityChartFull from './components/HumidityChartFull';
+import TemperatureChartFull from './components/TermperatureChartFull';
+import SpectChartFull from './components/SpectChartFull';
 
 function App() {
   const [spectData, setSpectData] = useState([]);
@@ -67,10 +69,25 @@ function App() {
     }
     const data = await response.json();
 
-    const dataArr = await data.map((entry) => ({
-      dateTime: entry.dateTime,
-      [name]: entry[name]
-    }));
+    let dataArr = []
+
+    if (name === 'spect') {
+      dataArr = await data.map((entry) => ({
+        dateTime: entry.dateTime,
+        spectV: entry.spectV,
+        spectB: entry.spectB,
+        spectG: entry.spectG,
+        spectY: entry.spectY,
+        spectD: entry.spectD,
+        spectR: entry.spectR
+      }))
+    } else {
+      dataArr = await data.map((entry) => ({
+        dateTime: entry.dateTime,
+        [name]: entry[name]
+      }));
+    }
+
 
     return dataArr;
   }
@@ -87,6 +104,13 @@ function App() {
         break;
       case 'humidity':
         setFullScreenChart(() => <HumidityChartFull humidityData={fetchedData} />);
+        break;
+      case 'temperature':
+        setFullScreenChart(() => <TemperatureChartFull temperatureData={fetchedData} />);
+        break;
+      case 'spect':
+        setFullScreenChart(() => <SpectChartFull spectData={fetchedData} />);
+        break;
     }
 
     setIsFullScreen(true);
@@ -129,10 +153,10 @@ function App() {
           <HumidityChart humidityData={humidityData} handleChartClick={handleChartClick}/>
         </div>
         <div className='col-start-3 col-span-1 row-span-1 flex flex-col text-center'>
-          <TemperatureChart tempData={tempData} />
+          <TemperatureChart tempData={tempData} handleChartClick={handleChartClick}/>
         </div>
         <div className='col-start-1 col-span-2 row-span-2 row-start-3 flex flex-col text-center'>
-          <SpectChart spectData={spectData} />
+          <SpectChart spectData={spectData} handleChartClick={handleChartClick} />
         </div>
       </div>
     </>

@@ -40,7 +40,6 @@ export default function HumidityChartFull({ humidityData }) {
   const data = humidityData;
 
   const movingAverageData = calculateMovingAverage(humidityData, 10);
-  const minHumidity = Math.min(...movingAverageData.map((entry) => entry.humidity));
 
   // Custom tooltip formatter (for better formatting)
   const CustomTooltip = ({ active, payload, label }) => {
@@ -80,7 +79,7 @@ export default function HumidityChartFull({ humidityData }) {
         <LineChart
           width={730}
           height={250}
-          data={data}
+          data={movingAverageData}
           margin={{ top: 25, right: 30, left: 20, bottom: 30 }}
         >
           <CartesianGrid strokeDasharray='3 3' stroke='#5d5e5e' />
@@ -94,7 +93,6 @@ export default function HumidityChartFull({ humidityData }) {
             dataKey='humidity'
             tick={{ fill: 'gray', dy: -15 }}
             angle={-45}
-            domain={[minHumidity, 'auto']}
           >
             <Label value={'Humidity %'} angle={-90} fill='white' dx={-30} />
           </YAxis>
@@ -102,7 +100,6 @@ export default function HumidityChartFull({ humidityData }) {
           {/* <Legend /> */}
           <Line
             type='monotone'
-            data={movingAverageData}
             dataKey='humidity'
             stroke='#fff'
             dot={false}
