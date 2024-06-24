@@ -24,7 +24,7 @@ router.get('/data', async (request, response) => {
 });
 
 // Get all temperature data
-router.get('/data/temp', async (request, response) => {
+router.get('/data/temperature', async (request, response) => {
   try {
     // Retrieve temperature data points in ascending order
     const sensorData = await SensorData.find({}, ['temperature', 'dateTime']).sort({ dateTime: 1 });
