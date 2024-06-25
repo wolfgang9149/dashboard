@@ -90,14 +90,14 @@ const readCSVFromS3 = async () => {
 
           try {
             await sensorData.save();
-            // eslint-disable-next-line no-console
-            console.log(`Successfully processed row in file: ${file.Key}`);
           } catch (saveError) {
             // eslint-disable-next-line no-console
             console.error('Error saving data to MongoDB', saveError);
           }
         })
         .on('end', async () => {
+          // eslint-disable-next-line no-console
+          console.log(`Successfully processed row in file: ${file.Key}`);
           const transferredFile = new TransferredFile({ fileName: file.Key });
 
           await transferredFile.save();
