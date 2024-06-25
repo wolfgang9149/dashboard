@@ -18,7 +18,6 @@ function App() {
   const [pressureData, setPressureData] = useState([]);
   const [isFullScreen, setIsFullScreen] = useState(null);
   const [fullScreenChart, setFullScreenChart] = useState(null);
-  const [fullData, setFullData] = useState([]);
 
   useEffect(() => {
     getData();
@@ -96,20 +95,19 @@ function App() {
     console.log('Chart clicked, expanding');
     try {
       const fetchedData = await getFullSensorData(name);
-      setFullData(fetchedData);
 
       switch (name) {
         case 'pressure':
-          setFullScreenChart(() => <PressureChartFull pressureData={fullData} />);
+          setFullScreenChart(() => <PressureChartFull pressureData={fetchedData} />);
           break;
         case 'humidity':
-          setFullScreenChart(() => <HumidityChartFull humidityData={fullData} />);
+          setFullScreenChart(() => <HumidityChartFull humidityData={fetchedData} />);
           break;
         case 'temperature':
-          setFullScreenChart(() => <TemperatureChartFull temperatureData={fullData} />);
+          setFullScreenChart(() => <TemperatureChartFull temperatureData={fetchedData} />);
           break;
         case 'spect':
-          setFullScreenChart(() => <SpectChartFull spectData={fullData} />);
+          setFullScreenChart(() => <SpectChartFull spectData={fetchedData} />);
           break;
       }
 
