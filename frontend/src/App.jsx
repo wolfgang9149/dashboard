@@ -100,16 +100,16 @@ function App() {
 
       switch (name) {
         case 'pressure':
-          setFullScreenChart(() => <PressureChartFull pressureData={fetchedData} />);
+          setFullScreenChart(() => <PressureChartFull pressureData={fullData} />);
           break;
         case 'humidity':
-          setFullScreenChart(() => <HumidityChartFull humidityData={fetchedData} />);
+          setFullScreenChart(() => <HumidityChartFull humidityData={fullData} />);
           break;
         case 'temperature':
-          setFullScreenChart(() => <TemperatureChartFull temperatureData={fetchedData} />);
+          setFullScreenChart(() => <TemperatureChartFull temperatureData={fullData} />);
           break;
         case 'spect':
-          setFullScreenChart(() => <SpectChartFull spectData={fetchedData} />);
+          setFullScreenChart(() => <SpectChartFull spectData={fullData} />);
           break;
       }
 
