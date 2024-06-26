@@ -11,6 +11,7 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import formatDateTick from '../services/formatDateTick';
+import Loader from '../services/Loader';
 
 export default function PressureChart({ pressureData, dataPoints, handleChartClick }) {
   let data;
@@ -54,41 +55,45 @@ export default function PressureChart({ pressureData, dataPoints, handleChartCli
 
   return (
     <>
-      <div className="relative">
+      <div className='relative'>
         <h3 className='text-white text-[1.5rem] my-2'>Pressure/Time Graph</h3>
         <img
           src='expand-icon.svg'
-          className='h-[25px] px-2 cursor-pointer absolute right-[10px] top-[1px]'
+          className='h-[25px] px-2 cursor-pointer absolute right-[10px] top-[15px]'
           onClick={() => handleChartClick('pressure')}
         />
       </div>
-      <ResponsiveContainer width='100%' height='100%'>
-        <LineChart
-          width={730}
-          height={250}
-          data={data}
-          margin={{ top: 15, right: 30, left: 20, bottom: 30 }}
-        >
-          <CartesianGrid strokeDasharray='3 3' stroke='#5d5e5e' />
-          <XAxis
-            dataKey='dateTime'
-            tickFormatter={formatDateTick}
-            tick={{ dy: 15, fill: 'gray' }}
-            interval={Math.ceil(data.length / 5)}
-          />
-          <YAxis
-            dataKey='pressure'
-            tick={{ fill: 'gray', dy: -12 }}
-            angle={-45}
-            domain={[minPressure, 'auto']}
+      {pressureData.length == 0 ? (
+        <Loader />
+      ) : (
+        <ResponsiveContainer width='100%' height='100%'>
+          <LineChart
+            width={730}
+            height={250}
+            data={data}
+            margin={{ top: 15, right: 30, left: 20, bottom: 30 }}
           >
-            <Label value={'Pressure Pa'} angle={-90} fill='white' dx={-30} />
-          </YAxis>
-          <Tooltip content={CustomTooltip} />
-          {/* <Legend /> */}
-          <Line type='monotone' dataKey='pressure' stroke='#fff' dot={false} />
-        </LineChart>
-      </ResponsiveContainer>
+            <CartesianGrid strokeDasharray='3 3' stroke='#5d5e5e' />
+            <XAxis
+              dataKey='dateTime'
+              tickFormatter={formatDateTick}
+              tick={{ dy: 15, fill: 'gray' }}
+              interval={Math.ceil(data.length / 5)}
+            />
+            <YAxis
+              dataKey='pressure'
+              tick={{ fill: 'gray', dy: -12 }}
+              angle={-45}
+              domain={[minPressure, 'auto']}
+            >
+              <Label value={'Pressure Pa'} angle={-90} fill='white' dx={-30} />
+            </YAxis>
+            <Tooltip content={CustomTooltip} />
+            {/* <Legend /> */}
+            <Line type='monotone' dataKey='pressure' stroke='#fff' dot={false} />
+          </LineChart>
+        </ResponsiveContainer>
+      )}
     </>
   );
 }
