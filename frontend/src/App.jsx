@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
-import FlightStageTab from './components/FlightStageTab';
-import TimeTab from './components/TimeTab';
 import TemperatureChart from './components/TemperatureChart';
 import SpectChart from './components/SpectChart';
 import HumidityChart from './components/HumidityChart';
@@ -18,10 +16,11 @@ function App() {
   const [pressureData, setPressureData] = useState([]);
   const [isFullScreen, setIsFullScreen] = useState(null);
   const [fullScreenChart, setFullScreenChart] = useState(null);
+  const [isLive, setIsLive] = useState(false)
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [isLive]);
 
   // Single API call for all data points, query limited to 50
   async function getData() {
@@ -36,7 +35,7 @@ function App() {
     const humidityArr = data.map((entry) => ({
       dateTime: entry.dateTime,
       humidity: entry.humidity
-    }));
+    })); 
 
     const pressureArr = data.map((entry) => ({
       dateTime: entry.dateTime,
@@ -126,7 +125,7 @@ function App() {
 
   return (
     <>
-      <Navbar />
+      <Navbar isLive={isLive} setIsLive={setIsLive} spectData={spectData}/>
       {isFullScreen && (
         <div className='flex justify-center'>
           <div className='fixed top-[5vh] p-16 w-[90vw] h-[90vh] bg-[#0c1625] z-50'>
@@ -140,9 +139,9 @@ function App() {
           </div>
         </div>
       )}
-      <div className='grid grid-cols-3 grid-rows-[30vh_30vh_30vh] gap-2 p-2 lg:p-8 bg-[#13253f] border-2'>
+      <div className='grid grid-cols-3 grid-rows-[30vh_30vh_30vh] gap-2 p-2 lg:p-8 bg-[#13253f] border-2 border-black'>
         <div className='h-[300px]'>
-          <div className='bg-gray-300'>Image placeholder</div>
+          <div className='bg-gray-300 text-[2rem]'>Image placeholder</div>
         </div>
         <div className='col-start-3 col-span-1 row-span-1 flex flex-col text-center'>
           <PressureChart
