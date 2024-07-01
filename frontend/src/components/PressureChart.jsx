@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   LineChart,
   Line,
@@ -6,12 +5,12 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   Label,
   ResponsiveContainer
 } from 'recharts';
 import formatDateTick from '../services/formatDateTick';
 import Loader from '../services/Loader';
+import ChartContainer from './ChartContainer';
 
 export default function PressureChart({ pressureData, dataPoints, handleChartClick }) {
   let data;
@@ -54,15 +53,7 @@ export default function PressureChart({ pressureData, dataPoints, handleChartCli
   };
 
   return (
-    <>
-      <div className='relative'>
-        <h3 className='text-white text-[1.5rem] my-2'>Pressure/Time Graph</h3>
-        <img
-          src='expand-icon.svg'
-          className='h-[25px] px-2 cursor-pointer absolute right-[10px] top-[15px]'
-          onClick={() => handleChartClick('pressure')}
-        />
-      </div>
+    <ChartContainer title='Pressure/Time Graph' onZoom={handleChartClick('pressure')}>
       {pressureData.length == 0 ? (
         <Loader />
       ) : (
@@ -86,7 +77,7 @@ export default function PressureChart({ pressureData, dataPoints, handleChartCli
               angle={-45}
               domain={[minPressure, 'auto']}
             >
-              <Label value={'Pressure Pa'} angle={-90} fill='white' dx={-30} />
+              <Label value={'Pressure (Pa)'} angle={-90} fill='white' dx={-30} />
             </YAxis>
             <Tooltip content={CustomTooltip} />
             {/* <Legend /> */}
@@ -94,6 +85,6 @@ export default function PressureChart({ pressureData, dataPoints, handleChartCli
           </LineChart>
         </ResponsiveContainer>
       )}
-    </>
+    </ChartContainer>
   );
 }

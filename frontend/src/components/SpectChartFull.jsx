@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   LineChart,
   Line,
@@ -11,6 +10,7 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import formatDateTick from '../services/formatDateTick';
+import ChartContainer from './ChartContainer';
 
 const calculateMovingAverage = (data, windowSize) => {
   const movingAverageData = [];
@@ -56,7 +56,7 @@ const calculateMovingAverage = (data, windowSize) => {
 };
 
 export default function SpectChartFull({ spectData }) {
-  console.log(spectData);
+  // console.log(spectData);
   if (!spectData) {
     // Loading placeholder so things don't break
     return <div>Loading</div>;
@@ -101,10 +101,7 @@ export default function SpectChartFull({ spectData }) {
   };
 
   return (
-    <>
-      <div className='text-center'>
-        <h1 className='text-[2rem] text-white'>Spectral/Time Graph</h1>
-      </div>
+    <ChartContainer title='Spectral/Time Graph'>
       <ResponsiveContainer width='100%' height='95%'>
         <LineChart
           width={730}
@@ -136,12 +133,30 @@ export default function SpectChartFull({ spectData }) {
             dot={false}
           />
           <Line type='monotone' dataKey='spectB' name='Blue (500nm)' stroke='#1c53e7' dot={false} />
-          <Line type='monotone' dataKey='spectG' name='Green (550nm)' stroke='#2e6930' dot={false} />
-          <Line type='monotone' dataKey='spectY' name='Yellow (570nm)' stroke='#FFFF00' dot={false} />
-          <Line type='monotone' dataKey='spectD' name='Orange (600nm)' stroke='#FFA500' dot={false} />
+          <Line
+            type='monotone'
+            dataKey='spectG'
+            name='Green (550nm)'
+            stroke='#2e6930'
+            dot={false}
+          />
+          <Line
+            type='monotone'
+            dataKey='spectY'
+            name='Yellow (570nm)'
+            stroke='#FFFF00'
+            dot={false}
+          />
+          <Line
+            type='monotone'
+            dataKey='spectD'
+            name='Orange (600nm)'
+            stroke='#FFA500'
+            dot={false}
+          />
           <Line type='monotone' dataKey='spectR' name='Red (650nm)' stroke='#FF0000' dot={false} />
         </LineChart>
       </ResponsiveContainer>
-    </>
+    </ChartContainer>
   );
 }

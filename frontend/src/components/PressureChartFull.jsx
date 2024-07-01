@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   LineChart,
   Line,
@@ -6,11 +5,11 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   Label,
   ResponsiveContainer
 } from 'recharts';
 import formatDateTick from '../services/formatDateTick';
+import ChartContainer from './ChartContainer';
 
 const calculateMovingAverage = (data, windowSize) => {
   const movingAverageData = [];
@@ -46,10 +45,10 @@ export default function PressureChartFull({ pressureData }) {
   const CustomTooltip = ({ active, payload, label }) => {
     let time;
     if (label) {
-      const utcDate = new Date(label)
-      const timeString = String(utcDate)
-      const timeOnly = timeString.split(" ")
-      time = timeOnly[4]
+      const utcDate = new Date(label);
+      const timeString = String(utcDate);
+      const timeOnly = timeString.split(' ');
+      time = timeOnly[4];
     }
 
     if (active && payload && payload.length) {
@@ -72,10 +71,7 @@ export default function PressureChartFull({ pressureData }) {
   };
 
   return (
-    <>
-      <div className='text-center'>
-        <h1 className='text-[2rem] text-white'>Pressure/Time Graph</h1>
-      </div>
+    <ChartContainer title='Pressure/Time Graph'>
       <ResponsiveContainer width='100%' height='95%'>
         <LineChart
           width={730}
@@ -100,14 +96,9 @@ export default function PressureChartFull({ pressureData }) {
           </YAxis>
           <Tooltip content={CustomTooltip} />
           {/* <Legend /> */}
-          <Line
-            type='monotone'
-            dataKey='pressure'
-            stroke='#fff'
-            dot={false}
-          />
+          <Line type='monotone' dataKey='pressure' stroke='#fff' dot={false} />
         </LineChart>
       </ResponsiveContainer>
-    </>
+    </ChartContainer>
   );
 }

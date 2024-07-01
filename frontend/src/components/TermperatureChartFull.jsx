@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   LineChart,
   Line,
@@ -6,11 +5,11 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   Label,
   ResponsiveContainer
 } from 'recharts';
 import formatDateTick from '../services/formatDateTick';
+import ChartContainer from './ChartContainer';
 
 const calculateMovingAverage = (data, windowSize) => {
   const movingAverageData = [];
@@ -45,10 +44,10 @@ export default function TemperatureChartFull({ temperatureData }) {
   const CustomTooltip = ({ active, payload, label }) => {
     let time;
     if (label) {
-      const utcDate = new Date(label)
-      const timeString = String(utcDate)
-      const timeOnly = timeString.split(" ")
-      time = timeOnly[4]
+      const utcDate = new Date(label);
+      const timeString = String(utcDate);
+      const timeOnly = timeString.split(' ');
+      time = timeOnly[4];
     }
 
     if (active && payload && payload.length) {
@@ -71,10 +70,7 @@ export default function TemperatureChartFull({ temperatureData }) {
   };
 
   return (
-    <>
-      <div className='text-center'>
-        <h1 className='text-[2rem] text-white'>Temperature/Time Graph</h1>
-      </div>
+    <ChartContainer title='Temperature/Time Graph'>
       <ResponsiveContainer width='100%' height='95%'>
         <LineChart
           width={730}
@@ -89,23 +85,14 @@ export default function TemperatureChartFull({ temperatureData }) {
             tick={{ dy: 20, fill: 'gray' }}
             interval={Math.ceil(data.length / 100)}
           />
-          <YAxis
-            dataKey='temperature'
-            tick={{ fill: 'gray', dy: -15 }}
-            angle={-45}
-          >
+          <YAxis dataKey='temperature' tick={{ fill: 'gray', dy: -15 }} angle={-45}>
             <Label value={'Temperature °C'} angle={-90} fill='white' dx={-30} />
           </YAxis>
           <Tooltip content={CustomTooltip} />
           {/* <Legend /> */}
-          <Line
-            type='monotone'
-            dataKey='temperature'
-            stroke='#fff'
-            dot={false}
-          />
+          <Line type='monotone' dataKey='temperature' stroke='#fff' dot={false} />
         </LineChart>
       </ResponsiveContainer>
-    </>
+    </ChartContainer>
   );
 }
