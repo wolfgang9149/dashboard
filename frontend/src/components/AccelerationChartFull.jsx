@@ -101,10 +101,11 @@ export default function AccelerationChartFull({ accelerationData }) {
           <XAxis
             dataKey='dateTime'
             tickFormatter={formatDateTick}
-            tick={{ dy: 20, fill: 'gray' }}
+            tick={{ dy: 15, fill: 'white', fontSize: 12 }}
             interval={Math.ceil(data.length / 100)}
+            stroke='white'
           />
-          <YAxis tick={{ fill: 'gray' }}>
+          <YAxis tick={{ fill: 'white', dx: -10, fontSize: 16 }} angle={0} stroke='white'>
             <Label value={'Acceleration'} angle={-90} fill='white' dx={-30} />
           </YAxis>
           <Tooltip content={CustomTooltip} />
