@@ -5,8 +5,10 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
   Label,
-  ResponsiveContainer
+  ResponsiveContainer,
+  ReferenceArea
 } from 'recharts';
 import formatDateTick from '../services/formatDateTick';
 import ChartContainer from './ChartContainer';
@@ -14,31 +16,46 @@ import ChartContainer from './ChartContainer';
 const calculateMovingAverage = (data, windowSize) => {
   const movingAverageData = [];
 
-  for (let i = 0; i < data.length; i += 10) {
-    let sum = 0;
+  for (let i = 0; i < data.length; i += 5) {
+    let acxSum = 0;
+    let acySum = 0;
+    let aczSum = 0;
     let count = 0;
 
     for (let j = Math.max(0, i - windowSize + 1); j <= i; j++) {
-      sum += data[j].humidity;
+      acxSum += data[j].acx;
+      acySum += data[j].acy;
+      aczSum += data[j].acz;
       count++;
     }
 
-    const average = sum / count;
-    movingAverageData.push({ dateTime: data[i].dateTime, humidity: average });
+    const acxAverage = acxSum / count;
+    const acyAverage = acySum / count;
+    const aczAverage = aczSum / count;
+
+    movingAverageData.push({
+      dateTime: data[i].dateTime,
+      acx: acxAverage,
+      acy: acyAverage,
+      acz: aczAverage
+    });
   }
 
   return movingAverageData;
 };
 
-export default function HumidityChartFull({ humidityData }) {
-  if (!humidityData) {
+export default function AccelerationChartFull({ accelerationData }) {
+    
+
+  // console.log(spectData);
+  if (!accelerationData) {
     // Loading placeholder so things don't break
     return <div>Loading</div>;
   }
 
-  const data = humidityData;
+  const data = accelerationData;
 
-  const movingAverageData = calculateMovingAverage(humidityData, 10);
+  const movingAverageData = calculateMovingAverage(accelerationData, 50);
 
   // Custom tooltip formatter (for better formatting)
   const CustomTooltip = ({ active, payload, label }) => {
@@ -61,7 +78,9 @@ export default function HumidityChartFull({ humidityData }) {
           }}
         >
           <p className='label'>{`Time: ${time}`}</p>
-          <p className='data'>{`Humidity: ${payload[0].value.toFixed(2).toLocaleString()} %`}</p>
+          <p className='data'>{`X: ${payload[0].value.toFixed(2)}`}</p>
+          <p className='data'>{`Y: ${payload[1].value.toFixed(2)}`}</p>
+          <p className='data'>{`Z: ${payload[2].value.toFixed(2)}`}</p>
         </div>
       );
     }
@@ -70,7 +89,7 @@ export default function HumidityChartFull({ humidityData }) {
   };
 
   return (
-    <ChartContainer title='Humidity/Time'>
+    <ChartContainer title='Acceleration/Time'>
       <ResponsiveContainer width='100%' height='95%'>
         <LineChart
           width={730}
@@ -85,12 +104,18 @@ export default function HumidityChartFull({ humidityData }) {
             tick={{ dy: 20, fill: 'gray' }}
             interval={Math.ceil(data.length / 100)}
           />
-          <YAxis dataKey='humidity' tick={{ fill: 'gray', dy: -15 }} angle={-45}>
-            <Label value={'Humidity %'} angle={-90} fill='white' dx={-30} />
+          <YAxis tick={{ fill: 'gray' }}>
+            <Label value={'Acceleration'} angle={-90} fill='white' dx={-30} />
           </YAxis>
           <Tooltip content={CustomTooltip} />
-          {/* <Legend /> */}
-          <Line type='monotone' dataKey='humidity' stroke='#fff' dot={false} />
+          <Legend
+            verticalAlign='bottom'
+            align='center'
+            wrapperStyle={{ paddingTop: '40px' }} // Add padding to separate the legend from the chart
+          />
+          <Line type='monotone' dataKey='acx' name='X-axis' stroke='#FFFF00' dot={false} />
+          <Line type='monotone' dataKey='acy' name='Y-axis' stroke='#fc0f03' dot={false} />
+          <Line type='monotone' dataKey='acz' name='Z-axis' stroke='#c603fc' dot={false} />
         </LineChart>
       </ResponsiveContainer>
     </ChartContainer>

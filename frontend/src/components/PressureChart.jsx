@@ -12,14 +12,8 @@ import formatDateTick from '../services/formatDateTick';
 import Loader from '../services/Loader';
 import ChartContainer from './ChartContainer';
 
-export default function PressureChart({ pressureData, dataPoints, handleChartClick }) {
-  let data;
-
-  if (dataPoints) {
-    data = pressureData.slice(-dataPoints);
-  } else {
-    data = pressureData;
-  }
+export default function PressureChart({ pressureData, handleChartClick }) {
+  const data = pressureData.slice(-50);
 
   const minPressure = Math.min(...data.map((entry) => entry.pressure));
 
@@ -53,7 +47,7 @@ export default function PressureChart({ pressureData, dataPoints, handleChartCli
   };
 
   return (
-    <ChartContainer title='Pressure/Time Graph' onZoom={handleChartClick('pressure')}>
+    <ChartContainer title='Pressure/Time' onZoom={handleChartClick('pressure')}>
       {pressureData.length == 0 ? (
         <Loader />
       ) : (
@@ -71,13 +65,8 @@ export default function PressureChart({ pressureData, dataPoints, handleChartCli
               tick={{ dy: 15, fill: 'gray' }}
               interval={Math.ceil(data.length / 5)}
             />
-            <YAxis
-              dataKey='pressure'
-              tick={{ fill: 'gray', dy: -12 }}
-              angle={-45}
-              domain={[minPressure, 'auto']}
-            >
-              <Label value={'Pressure (Pa)'} angle={-90} fill='white' dx={-30} />
+            <YAxis dataKey='pressure' tick={{ fill: 'gray' }} domain={[minPressure, 'auto']}>
+              <Label value={'Pressure (kPa)'} angle={-90} fill='white' dx={-30} />
             </YAxis>
             <Tooltip content={CustomTooltip} />
             {/* <Legend /> */}

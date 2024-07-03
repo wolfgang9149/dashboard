@@ -5,15 +5,17 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Label,
-  ResponsiveContainer
+  Legend,
+  ResponsiveContainer,
+  ReferenceArea
 } from 'recharts';
 import formatDateTick from '../services/formatDateTick';
 import Loader from '../services/Loader';
 import ChartContainer from './ChartContainer';
 
-export default function HumidityChart({ humidityData, handleChartClick }) {
-  const data = humidityData.slice(-50);
+export default function AccelerationChart({ accelerationData, handleChartClick, flightStage }) {
+
+  const data = accelerationData.slice(-50);
 
   // Custom tooltip formatter (optional, for better formatting)
   const CustomTooltip = ({ active, payload, label }) => {
@@ -30,13 +32,15 @@ export default function HumidityChart({ humidityData, handleChartClick }) {
         <div
           className='custom-tooltip'
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+            backgroundColor: 'rgba(255, 255, 255, 0.7)',
             padding: '10px',
             border: '1px solid #ccc'
           }}
         >
           <p className='label'>{`Time: ${time}`}</p>
-          <p className='data'>{`Humidity: ${payload[0].value.toFixed(2)}%`}</p>
+          <p className='data'>{`X: ${payload[0].value.toFixed(2)}`}</p>
+          <p className='data'>{`Y: ${payload[1].value.toFixed(2)}`}</p>
+          <p className='data'>{`Z: ${payload[2].value.toFixed(2)}`}</p>
         </div>
       );
     }
@@ -45,8 +49,8 @@ export default function HumidityChart({ humidityData, handleChartClick }) {
   };
 
   return (
-    <ChartContainer onZoom={handleChartClick('humidity')} title='Humidity/Time'>
-      {humidityData.length == 0 ? (
+    <ChartContainer title='Acceleration/Time' onZoom={handleChartClick('acceleration')}>
+      {accelerationData.length == 0 ? (
         <Loader />
       ) : (
         <ResponsiveContainer width='100%' height='100%'>
@@ -54,21 +58,25 @@ export default function HumidityChart({ humidityData, handleChartClick }) {
             width={730}
             height={250}
             data={data}
-            margin={{ top: 5, right: 30, left: 20, bottom: 30 }}
+            margin={{ top: 20, right: 30, bottom: 15 }}
           >
-            <CartesianGrid strokeDasharray='3 3' stroke='#5d5e5e' />
+            <CartesianGrid strokeDasharray='3 3' stroke='#5d5e5e' fill={flightStage.colour}/>
             <XAxis
               dataKey='dateTime'
               tickFormatter={formatDateTick}
               tick={{ dy: 10, fill: 'gray' }}
-              interval={Math.ceil(data.length / 5)}
+              interval={Math.ceil(data.length / 10)}
             />
-            <YAxis dataKey='humidity' tick={{ fill: 'gray' }}>
-              <Label value={'Humidity (%)'} angle={-90} fill='white' dx={-15} />
-            </YAxis>
+            <YAxis tick={{ fill: 'gray' }} />
             <Tooltip content={CustomTooltip} />
-            {/* <Legend /> */}
-            <Line type='monotone' dataKey='humidity' stroke='#fff' dot={false} />
+            <Legend
+              verticalAlign='bottom'
+              align='center'
+              wrapperStyle={{ paddingTop: '40px' }} // Add padding to separate the legend from the chart
+            />
+            <Line type='monotone' dataKey='acx' name='X-axis' stroke='#FFFF00' dot={false} />
+            <Line type='monotone' dataKey='acy' name='Y-axis' stroke='#fc0f03' dot={false} />
+            <Line type='monotone' dataKey='acz' name='Z-axis' stroke='#c603fc' dot={false} />
           </LineChart>
         </ResponsiveContainer>
       )}

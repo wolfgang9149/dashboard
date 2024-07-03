@@ -50,7 +50,7 @@ export default function SpectChart({ spectData, handleChartClick }) {
   };
 
   return (
-    <ChartContainer title='Spectral Graph' onZoom={handleChartClick('spect')}>
+    <ChartContainer title='Spectral/Time' onZoom={handleChartClick('spect')}>
       {spectData.length == 0 ? (
         <Loader />
       ) : (
@@ -68,7 +68,7 @@ export default function SpectChart({ spectData, handleChartClick }) {
               tick={{ dy: 10, fill: 'gray' }}
               interval={Math.ceil(data.length / 10)}
             />
-            <YAxis tick={{ fill: 'gray', dy: -15 }} angle={-45} />
+            <YAxis tick={{ fill: 'gray' }} />
             <Tooltip content={CustomTooltip} />
             <Legend
               verticalAlign='bottom'

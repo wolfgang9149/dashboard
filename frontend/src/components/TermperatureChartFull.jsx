@@ -70,7 +70,7 @@ export default function TemperatureChartFull({ temperatureData }) {
   };
 
   return (
-    <ChartContainer title='Temperature/Time Graph'>
+    <ChartContainer title='Temperature/Time'>
       <ResponsiveContainer width='100%' height='95%'>
         <LineChart
           width={730}
@@ -85,7 +85,7 @@ export default function TemperatureChartFull({ temperatureData }) {
             tick={{ dy: 20, fill: 'gray' }}
             interval={Math.ceil(data.length / 100)}
           />
-          <YAxis dataKey='temperature' tick={{ fill: 'gray', dy: -15 }} angle={-45}>
+          <YAxis dataKey='temperature' tick={{ fill: 'gray' }}>
             <Label value={'Temperature °C'} angle={-90} fill='white' dx={-30} />
           </YAxis>
           <Tooltip content={CustomTooltip} />

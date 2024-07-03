@@ -101,7 +101,7 @@ export default function SpectChartFull({ spectData }) {
   };
 
   return (
-    <ChartContainer title='Spectral/Time Graph'>
+    <ChartContainer title='Spectral/Time'>
       <ResponsiveContainer width='100%' height='95%'>
         <LineChart
           width={730}
@@ -116,7 +116,7 @@ export default function SpectChartFull({ spectData }) {
             tick={{ dy: 20, fill: 'gray' }}
             interval={Math.ceil(data.length / 100)}
           />
-          <YAxis tick={{ fill: 'gray', dy: -15 }} angle={-45}>
+          <YAxis tick={{ fill: 'gray' }}>
             <Label value={'Spectral Value'} angle={-90} fill='white' dx={-30} />
           </YAxis>
           <Tooltip content={CustomTooltip} />
