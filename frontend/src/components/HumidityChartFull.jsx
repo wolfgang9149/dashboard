@@ -70,7 +70,7 @@ export default function HumidityChartFull({ humidityData }) {
   };
 
   return (
-    <ChartContainer title='Humidity/Time Graph'>
+    <ChartContainer title='Humidity/Time'>
       <ResponsiveContainer width='100%' height='95%'>
         <LineChart
           width={730}

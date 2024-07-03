@@ -13,7 +13,7 @@ import Loader from '../services/Loader';
 import ChartContainer from './ChartContainer';
 
 export default function HumidityChart({ humidityData, handleChartClick }) {
-  const data = humidityData.slice(-20);
+  const data = humidityData.slice(-50);
 
   // Custom tooltip formatter (optional, for better formatting)
   const CustomTooltip = ({ active, payload, label }) => {
@@ -45,7 +45,7 @@ export default function HumidityChart({ humidityData, handleChartClick }) {
   };
 
   return (
-    <ChartContainer onZoom={handleChartClick('humidity')} title='Humidity/Time Graph'>
+    <ChartContainer onZoom={handleChartClick('humidity')} title='Humidity/Time'>
       {humidityData.length == 0 ? (
         <Loader />
       ) : (

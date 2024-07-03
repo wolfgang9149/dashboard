@@ -101,7 +101,7 @@ export default function SpectChartFull({ spectData }) {
   };
 
   return (
-    <ChartContainer title='Spectral/Time Graph'>
+    <ChartContainer title='Spectral/Time'>
       <ResponsiveContainer width='100%' height='95%'>
         <LineChart
           width={730}

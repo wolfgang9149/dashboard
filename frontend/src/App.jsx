@@ -9,12 +9,16 @@ import PressureChartFull from './components/PressureChartFull';
 import HumidityChartFull from './components/HumidityChartFull';
 import TemperatureChartFull from './components/TermperatureChartFull';
 import SpectChartFull from './components/SpectChartFull';
+import AccelerationChart from './components/AccelerationChart';
+import AccelerationChartFull from './components/AccelerationChartFull';
 
 function App() {
   const [spectData, setSpectData] = useState([]);
   const [tempData, setTempData] = useState([]);
   const [humidityData, setHumidityData] = useState([]);
   const [pressureData, setPressureData] = useState([]);
+  const [accelerationData, setAccelerationData] = useState([]);
+  const [flightStage, setFlightStage] = useState("");
   const [activeData, setActiveData] = useState([]);
   const [isLive, setIsLive] = useState(false);
   const [currentActiveChart, setCurrentActiveChart] = useState(null);
@@ -61,10 +65,34 @@ function App() {
       spectR: entry.spectR
     }));
 
+    const accelerationArr = data.map((entry) => ({
+      dateTime: entry.dateTime,
+      acx: entry.acx,
+      acy: entry.acy,
+      acz: entry.acz
+    }));
+
     setTempData(temperatureArr);
     setHumidityData(humidityArr);
     setPressureData(pressureArr);
     setSpectData(spectArr);
+    setAccelerationData(accelerationArr);
+
+    const signalColorMap = {
+      LO: "rgba(117, 4, 32, 0.4)",
+      MG: "rgba(44, 105, 0, 0.4)",
+      RE: "rgba(117, 4, 32, 0.4)"
+    };
+    
+    // Find signal of last data point
+    const currentSignal = data[data.length - 1].signal;
+    
+    // Set flightStage based on the signal value
+    setFlightStage({
+      signal: currentSignal,
+      colour: signalColorMap[currentSignal] || "rgba(0, 0, 0, 0)" // Default to transparent black if signal not found
+    });
+
   }
 
   // Call individual API endpoints for full data set for sensor type, passed in as sensor 'name'
@@ -87,6 +115,14 @@ function App() {
         spectY: entry.spectY,
         spectD: entry.spectD,
         spectR: entry.spectR
+      }));
+    } else if (name === 'acceleration') {
+      dataArr = await data.map((entry) => ({
+        dateTime: entry.dateTime,
+        acx: entry.acx,
+        acy: entry.acy,
+        acz: entry.acz,
+        signal: entry.signal
       }));
     } else {
       dataArr = await data.map((entry) => ({
@@ -112,6 +148,9 @@ function App() {
 
       case 'spect':
         return <SpectChartFull spectData={activeData} />;
+
+      case 'acceleration':
+        return <AccelerationChartFull accelerationData={activeData} />;
     }
   }
 
@@ -148,6 +187,13 @@ function App() {
         </div>
         <div className='p-8 col-start-1 col-span-2 row-span-2 row-start-3 flex flex-col text-center border-t-1 border-white'>
           <SpectChart spectData={spectData} handleChartClick={onSelectActiveChart} />
+        </div>
+        <div className='p-6 col-start-2 col-span-1 row-span-2 row-start-3 flex flex-col text-center border-t-1 border-l-1 border-white'>
+          <AccelerationChart
+            accelerationData={accelerationData}
+            handleChartClick={onSelectActiveChart}
+            flightStage={flightStage}
+          />
         </div>
       </div>
       <Modal size='full' isOpen={isOpen} onClose={onClose}>

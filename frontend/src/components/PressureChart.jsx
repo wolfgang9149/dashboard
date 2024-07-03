@@ -12,14 +12,8 @@ import formatDateTick from '../services/formatDateTick';
 import Loader from '../services/Loader';
 import ChartContainer from './ChartContainer';
 
-export default function PressureChart({ pressureData, dataPoints, handleChartClick }) {
-  let data;
-
-  if (dataPoints) {
-    data = pressureData.slice(-dataPoints);
-  } else {
-    data = pressureData;
-  }
+export default function PressureChart({ pressureData, handleChartClick }) {
+  const data = pressureData.slice(-50);
 
   const minPressure = Math.min(...data.map((entry) => entry.pressure));
 
@@ -53,7 +47,7 @@ export default function PressureChart({ pressureData, dataPoints, handleChartCli
   };
 
   return (
-    <ChartContainer title='Pressure/Time Graph' onZoom={handleChartClick('pressure')}>
+    <ChartContainer title='Pressure/Time' onZoom={handleChartClick('pressure')}>
       {pressureData.length == 0 ? (
         <Loader />
       ) : (

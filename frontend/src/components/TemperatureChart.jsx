@@ -13,7 +13,7 @@ import Loader from '../services/Loader';
 import ChartContainer from './ChartContainer';
 
 export default function TemperatureChart({ tempData, handleChartClick }) {
-  const data = tempData.slice(-20);
+  const data = tempData.slice(-50);
 
   // Custom tooltip formatter (optional, for better formatting)
   const CustomTooltip = ({ active, payload, label }) => {
@@ -45,7 +45,7 @@ export default function TemperatureChart({ tempData, handleChartClick }) {
   };
 
   return (
-    <ChartContainer title='Temperature/Time Graph' onZoom={handleChartClick('temperature')}>
+    <ChartContainer title='Temperature/Time' onZoom={handleChartClick('temperature')}>
       {tempData.length == 0 ? (
         <Loader />
       ) : (
