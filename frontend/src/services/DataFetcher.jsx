@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@nextui-org/react';
 import axios from 'axios';
 
-const DataFetcher = ({ setSpectData, setTempData, setHumidityData, setPressureData, setAccelerationData }) => {
+const DataFetcher = ({ setSpectData, setTempData, setHumidityData, setPressureData, setAccelerationData, setFlightStage }) => {
   const [isFetching, setIsFetching] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
 
@@ -45,7 +45,8 @@ const DataFetcher = ({ setSpectData, setTempData, setHumidityData, setPressureDa
         dateTime: entry.dateTime,
         acx: entry.acx,
         acy: entry.acy,
-        acz: entry.acz
+        acz: entry.acz,
+        signal: entry.signal
       }));
   
       setTempData(temperatureArr);
@@ -53,6 +54,7 @@ const DataFetcher = ({ setSpectData, setTempData, setHumidityData, setPressureDa
       setPressureData(pressureArr);
       setSpectData(spectArr);
       setAccelerationData(accelerationArr);
+      setFlightStage(data[data.length - 1].signal)
 
     } catch (error) {
       console.error('Error fetching data:', error);
