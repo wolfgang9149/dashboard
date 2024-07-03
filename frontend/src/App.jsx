@@ -30,71 +30,6 @@ function App() {
     }
   });
 
-  useEffect(() => {
-    getData();
-  }, [isLive]);
-
-  // Single API call for all data points, query limited to 50
-  async function getData() {
-    const response = await fetch('http://localhost:4001/mission/data?limit=50');
-
-    const data = await response.json();
-
-    const temperatureArr = data.map((entry) => ({
-      dateTime: entry.dateTime,
-      temperature: entry.temperature
-    }));
-
-    const humidityArr = data.map((entry) => ({
-      dateTime: entry.dateTime,
-      humidity: entry.humidity
-    }));
-
-    const pressureArr = data.map((entry) => ({
-      dateTime: entry.dateTime,
-      pressure: entry.pressure
-    }));
-
-    const spectArr = data.map((entry) => ({
-      dateTime: entry.dateTime,
-      spectV: entry.spectV,
-      spectB: entry.spectB,
-      spectG: entry.spectG,
-      spectY: entry.spectY,
-      spectD: entry.spectD,
-      spectR: entry.spectR
-    }));
-
-    const accelerationArr = data.map((entry) => ({
-      dateTime: entry.dateTime,
-      acx: entry.acx,
-      acy: entry.acy,
-      acz: entry.acz
-    }));
-
-    setTempData(temperatureArr);
-    setHumidityData(humidityArr);
-    setPressureData(pressureArr);
-    setSpectData(spectArr);
-    setAccelerationData(accelerationArr);
-
-    const signalColorMap = {
-      LO: "rgba(117, 4, 32, 0.4)",
-      MG: "rgba(44, 105, 0, 0.4)",
-      RE: "rgba(117, 4, 32, 0.4)"
-    };
-    
-    // Find signal of last data point
-    const currentSignal = data[data.length - 1].signal;
-    
-    // Set flightStage based on the signal value
-    setFlightStage({
-      signal: currentSignal,
-      colour: signalColorMap[currentSignal] || "rgba(0, 0, 0, 0)" // Default to transparent black if signal not found
-    });
-
-  }
-
   // Call individual API endpoints for full data set for sensor type, passed in as sensor 'name'
   async function getFullSensorData(name) {
     // console.log('Getting data triggered');
@@ -167,7 +102,7 @@ function App() {
   };
 
   return (
-    <BaseLayout headerProps={{ isLive, toggleLive, spectData }}>
+    <BaseLayout headerProps={{ isLive, toggleLive, spectData, setSpectData, setTempData, setHumidityData, setPressureData, setAccelerationData }}>
       <div className='grid grid-cols-3 grid-rows-[30vh_30vh_30vh] w-full'>
         <div className='h-[300px]'>
           <div className='bg-gray-300 text-[2rem]'>Image placeholder</div>

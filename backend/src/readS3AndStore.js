@@ -97,7 +97,7 @@ const readCSVFromS3 = async () => {
         })
         .on('end', async () => {
           // eslint-disable-next-line no-console
-          console.log(`Successfully processed row in file: ${file.Key}`);
+          console.log(`Successfully processed file: ${file.Key}`);
           const transferredFile = new TransferredFile({ fileName: file.Key });
 
           await transferredFile.save();
