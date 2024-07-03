@@ -1,7 +1,8 @@
 import { Navbar, NavbarContent, Image, Button } from '@nextui-org/react';
 import { useState, useEffect } from 'react';
+import DataFetcher from '../services/DataFetcher';
 
-export default function Header({ isLive, toggleLive, spectData }) {
+export default function Header({ isLive, toggleLive, spectData, setSpectData, setTempData, setHumidityData, setPressureData, setAccelerationData }) {
   const [time, setTime] = useState('Loading...');
 
   useEffect(() => {
@@ -30,19 +31,7 @@ export default function Header({ isLive, toggleLive, spectData }) {
       <NavbarContent justify='left'>
         <div className='flex flex-row items-center gap-6'>
           <span className='text-white text-l'>Latest data: {time}</span>
-          {isLive ? (
-            <Button variant='solid' color='primary' onClick={toggleLive}>
-              <span className='relative flex h-8 w-8 mr-4 justify-center align-middle place-items-center'>
-                <span className='animate-ping absolute h-full w-full rounded-full bg-white opacity-75'></span>
-                <span className='relative inline-flex rounded-full h-4 w-4 bg-white'></span>
-              </span>
-              LIVE
-            </Button>
-          ) : (
-            <Button variant='solid' color='primary' onClick={toggleLive}>
-              Watch Live
-            </Button>
-          )}
+          <DataFetcher setSpectData={setSpectData} setTempData={setTempData} setHumidityData={setHumidityData} setPressureData={setPressureData} setAccelerationData={setAccelerationData}/>
         </div>
       </NavbarContent>
     </Navbar>
