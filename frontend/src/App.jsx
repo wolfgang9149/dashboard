@@ -185,7 +185,7 @@ function App() {
         <div className='p-8 col-start-3 col-span-1 row-span-1 flex flex-col text-center border-t-1 border-l-1 border-white'>
           <TemperatureChart tempData={tempData} handleChartClick={onSelectActiveChart} />
         </div>
-        <div className='p-8 col-start-1 col-span-2 row-span-2 row-start-3 flex flex-col text-center border-t-1 border-white'>
+        <div className='p-8 col-start-1 col-span-1 row-span-2 row-start-3 flex flex-col text-center border-t-1 border-white'>
           <SpectChart spectData={spectData} handleChartClick={onSelectActiveChart} />
         </div>
         <div className='p-6 col-start-2 col-span-1 row-span-2 row-start-3 flex flex-col text-center border-t-1 border-l-1 border-white'>
