@@ -101,8 +101,10 @@ export default function MainDashboard({
   return (
     <BaseLayout>
       <div className='grid grid-cols-3 grid-rows-[30vh_30vh_30vh] w-full'>
-        <div className='h-[300px]'>
-          <div className='bg-gray-300 text-[2rem]'>Image placeholder</div>
+        <div className='col-start-1 col-span-2'>
+          <div className='flex justify-center'>
+            <img src='stitchedImage.jpg' className="w-[60vh]"/>
+          </div>
         </div>
         <div className='p-8 col-start-3 col-span-1 row-span-1 flex flex-col text-center border-l-1 border-white'>
           <PressureChart
