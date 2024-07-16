@@ -1,4 +1,3 @@
-import React from 'react';
 import BaseLayout from '../layout/BaseLayout';
 
 function GridDashboard() {

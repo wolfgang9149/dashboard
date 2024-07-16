@@ -6,8 +6,7 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
-  ReferenceArea
+  ResponsiveContainer
 } from 'recharts';
 import formatDateTick from '../../services/formatDateTick';
 import Loader from '../../services/Loader';

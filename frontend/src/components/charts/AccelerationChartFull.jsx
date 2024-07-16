@@ -7,8 +7,7 @@ import {
   Tooltip,
   Legend,
   Label,
-  ResponsiveContainer,
-  ReferenceArea
+  ResponsiveContainer
 } from 'recharts';
 import formatDateTick from '../../services/formatDateTick';
 import ChartContainer from './ChartContainer';

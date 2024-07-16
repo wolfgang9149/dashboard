@@ -13,7 +13,6 @@ function App() {
   const [pressureData, setPressureData] = useState([]);
   const [accelerationData, setAccelerationData] = useState([]);
 
-
   // if (accelerationData?.length > 0) {
   //   const signal = accelerationData[accelerationData.length - 1].signal;
 

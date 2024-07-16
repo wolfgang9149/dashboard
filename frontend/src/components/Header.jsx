@@ -1,7 +1,7 @@
-import { Navbar, NavbarContent, Image, Button } from '@nextui-org/react';
+import { Navbar, NavbarContent, Image } from '@nextui-org/react';
 import { useState, useEffect } from 'react';
-import DataFetcher from '../services/DataFetcher';
 import { Link } from 'react-router-dom';
+import DataFetcher from '../services/DataFetcher';
 
 export default function Header({
   spectData,
@@ -14,9 +14,9 @@ export default function Header({
   const [time, setTime] = useState('Loading...');
   const [flightStage, setFlightStage] = useState('');
   const [stageStyle, setStageStyle] = useState({
-    colour: "",
-    stage: "Loading..."
-  })
+    colour: '',
+    stage: 'Loading...'
+  });
 
   useEffect(() => {
     if (spectData?.length > 0) {
@@ -29,23 +29,23 @@ export default function Header({
   }, [spectData]);
 
   useEffect(() => {
-    if (flightStage === "LO") {
+    if (flightStage === 'LO') {
       setStageStyle({
-        colour: "#a16e00",
-        stage: "Lift Off"
-      })
-    } else if (flightStage === "uG") {
+        colour: '#a16e00',
+        stage: 'Lift Off'
+      });
+    } else if (flightStage === 'uG') {
       setStageStyle({
-        colour: "#257d00",
-        stage: "Microgravity"
-      })
-    } else if (flightStage === "uG OFF") {
+        colour: '#257d00',
+        stage: 'Microgravity'
+      });
+    } else if (flightStage === 'uG OFF') {
       setStageStyle({
-        colour: "#a10025",
-        stage: "Re-entry"
-      })
+        colour: '#a10025',
+        stage: 'Re-entry'
+      });
     }
-  }, [flightStage])
+  }, [flightStage]);
 
   return (
     <Navbar
@@ -65,15 +65,24 @@ export default function Header({
       <div className='flex text-white w-auto'>
         <NavbarContent>
           <Link to='/'>
-            <p className="bg-gray-600 px-4 py-2 rounded-xl transition-all duration-300 hover:bg-gray-500 delay-50">Main dashboard</p>
+            <p className='bg-gray-600 px-4 py-2 rounded-xl transition-all duration-300 hover:bg-gray-500 delay-50'>
+              Main dashboard
+            </p>
           </Link>
           <Link to='/grid'>
-          <p className="bg-gray-600 px-4 py-2 rounded-xl transition-all duration-300 hover:bg-gray-500 delay-50">Grid dashboard</p>
+            <p className='bg-gray-600 px-4 py-2 rounded-xl transition-all duration-300 hover:bg-gray-500 delay-50'>
+              Grid dashboard
+            </p>
           </Link>
         </NavbarContent>
       </div>
       <NavbarContent justify='left'>
-        <p className='text-white px-8 py-2 rounded-xl w-[300px] text-center' style={{backgroundColor: stageStyle.colour}}>Flight Stage: {stageStyle.stage}</p>
+        <p
+          className='text-white px-8 py-2 rounded-xl w-[300px] text-center'
+          style={{ backgroundColor: stageStyle.colour }}
+        >
+          Flight Stage: {stageStyle.stage}
+        </p>
         <div className='flex flex-row items-center gap-6'>
           <span className='text-white text-l'>Latest data: {time}</span>
           <DataFetcher

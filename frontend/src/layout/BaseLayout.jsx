@@ -1,6 +1,4 @@
-import Header from '../components/Header';
-
-const BaseLayout = ({ children, headerProps }) => {
+const BaseLayout = ({ children }) => {
   return (
     <div className='flex flex-col min-h-screen min-w-[368px] max-h-[100dvh]'>
       {/* <Header {...headerProps} /> */}
