@@ -47,7 +47,7 @@ export default function AccelerationChart({ accelerationData, handleChartClick }
   };
 
   return (
-    <ChartContainer title='Acceleration/Time' onZoom={handleChartClick('acceleration')}>
+    <ChartContainer title='Acceleration/Time!' onZoom={handleChartClick('acceleration')}>
       {accelerationData.length == 0 ? (
         <Loader />
       ) : (
