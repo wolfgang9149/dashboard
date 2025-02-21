@@ -58,7 +58,7 @@ export default function Header({
           <Image
             src='/logo/rs-logo.png'
             alt='ResearchSat logo'
-            className='w-full max-h-[50px] md:w-auto'
+            className='w-full max-h-[100px] md:w-auto'
           />
         </Link>
       </NavbarContent>
